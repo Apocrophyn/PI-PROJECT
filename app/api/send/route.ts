@@ -17,7 +17,6 @@ export async function POST(req: Request) {
     const result = await sendEmail({
       subject: `New Contact Form Submission: ${subject}`,
       replyTo: email,
-      to: ['info@pitutors.com', 'ahsana123456@gmail.com'],
       react: ContactFormEmail({
         name,
         email,
