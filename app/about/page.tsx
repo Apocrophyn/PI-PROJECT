@@ -49,7 +49,7 @@ export default function AboutPage() {
               </div>
               <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl">Our Story and Mission</h1>
               <p className="text-lg text-gray-300">
-                PI Tutors was founded with a simple yet powerful mission: to make mathematics and physics accessible,
+                PI Tutors was founded with a simple yet powerful mission: to make mathematics and sciences accessible,
                 engaging, and enjoyable for all students. We believe that with the right guidance, every student can
                 excel in these subjects.
               </p>
@@ -94,7 +94,7 @@ export default function AboutPage() {
                 className="prose prose-lg dark:prose-invert text-gray-300"
               >
                 <p>
-                  PI Tutors was established by a group of passionate mathematics and physics educators who recognized a
+                  PI Tutors was established by a group of passionate mathematics and sciences educators who recognized a
                   gap in traditional education systems. Many students were struggling with these subjects not because they
                   lacked ability, but because they needed personalized attention and teaching methods tailored to their
                   unique learning styles.
@@ -106,14 +106,14 @@ export default function AboutPage() {
                 </p>
                 <p>
                   What started as a small tutoring service in Rotherham has grown into a respected institution, helping
-                  hundreds of students achieve their academic goals in mathematics and physics. We've expanded our
+                  hundreds of students achieve their academic goals in mathematics and sciences. We've expanded our
                   services to include online tutoring, making our expertise accessible to students across the UK and
                   beyond.
                 </p>
                 <p>
                   Today, PI Tutors stands as a testament to our commitment to educational excellence. We continue to
                   evolve our teaching methodologies while staying true to our core mission: helping students build
-                  confidence and achieve success in mathematics and physics.
+                  confidence and achieve success in mathematics and sciences.
                 </p>
               </motion.div>
             </div>
@@ -236,7 +236,7 @@ export default function AboutPage() {
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold text-white">Dr. Muhammad Taimur Khan</h3>
-                  <p className="mt-1 text-sm text-primary font-medium">Founder & Lead Mathematics Tutor</p>
+                  <p className="mt-1 text-sm text-primary font-medium">Founder & Lead Mathematics and Sciences Tutor</p>
                   <p className="mt-2 text-sm text-gray-400">
                     PhD, PGCert, MSc in Business and Management, BEng Chemical and Process Engineering
                   </p>
@@ -261,7 +261,7 @@ export default function AboutPage() {
                 </div>
                 <CardContent className="p-6">
                   <h3 className="text-xl font-bold text-white">Mr. Muhammad Mukarram</h3>
-                  <p className="mt-1 text-sm text-primary font-medium">Physics & Mathematics Tutor</p>
+                  <p className="mt-1 text-sm text-primary font-medium">Sciences & Mathematics Tutor</p>
                   <p className="mt-2 text-sm text-gray-400">
                     PGDE (Physics with Maths), MSc Nanoscience and Engineering, BSc Materials Engineering
                   </p>

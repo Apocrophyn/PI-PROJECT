@@ -326,7 +326,7 @@ export default function ServicesPage() {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-white mb-4">Our Services</h1>
             <p className="text-xl text-gray-400">
-              Empowering students through personalized tutoring in Mathematics and Physics
+              Empowering students through personalized tutoring in Mathematics and Sciences
             </p>
           </div>
 

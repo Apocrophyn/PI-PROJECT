@@ -74,7 +74,7 @@ export default function TutorsPage() {
                 </div>
                 <div className="col-span-1 lg:col-span-2 flex flex-col justify-center">
                   <h3 className="text-2xl font-bold text-white">Dr. Muhammad Taimur Khan</h3>
-                  <p className="mt-2 text-primary font-medium">Mathematics Specialist</p>
+                  <p className="mt-2 text-primary font-medium">Mathematics and Sciences Specialist</p>
                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <h4 className="text-sm font-semibold text-white">Qualifications</h4>
@@ -124,7 +124,7 @@ export default function TutorsPage() {
                 </div>
                 <div className="col-span-1 lg:col-span-2 flex flex-col justify-center">
                   <h3 className="text-2xl font-bold text-white">Mr. Muhammad Mukarram</h3>
-                  <p className="mt-2 text-primary font-medium">Physics & Mathematics Specialist</p>
+                  <p className="mt-2 text-primary font-medium">Sciences & Mathematics Specialist</p>
                   <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <h4 className="text-sm font-semibold text-white">Qualifications</h4>
