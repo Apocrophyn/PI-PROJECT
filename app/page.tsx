@@ -48,14 +48,14 @@ export default function Home() {
               className="space-y-6 text-center md:text-left"
             >
               <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-                Expert Math & Physics Tutoring
+                Expert Math & Sciences Tutoring
               </div>
               <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
                 <span className="block">Elevate Your</span>
                 <span className="block text-primary">Academic Excellence</span>
               </h1>
               <p className="text-lg text-gray-300">
-                Personalized tutoring in mathematics and physics from KS3 to A-Levels. Our expert educators empower students to
+                Personalized tutoring in mathematics and Sciences from KS3 to A-Levels. Our expert educators empower students to
                 master complex concepts and achieve remarkable academic success.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
@@ -98,7 +98,7 @@ export default function Home() {
           >
             <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Why Choose PI Tutors?</h2>
             <p className="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
-              We provide personalized tutoring services to help students excel in mathematics and develop critical
+              We provide personalized tutoring services to help students excel in mathematics and sciences to develop critical
               thinking skills.
             </p>
           </motion.div>
@@ -233,7 +233,7 @@ export default function Home() {
               </div>
               <div className="col-span-1 lg:col-span-2 flex flex-col justify-center">
                 <h3 className="text-2xl font-bold text-white">Mr. Muhammad Mukarram</h3>
-                <p className="mt-2 text-primary font-medium">Physics & Mathematics Specialist</p>
+                <p className="mt-2 text-primary font-medium">Sciences & Mathematics Specialist</p>
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <h4 className="text-sm font-semibold text-white">Qualifications</h4>
@@ -375,7 +375,7 @@ export default function Home() {
                 Making Mathematics Engaging & Fun
               </h2>
               <p className="text-lg text-gray-300">
-                Our tutors use interactive methods and real-world examples to make learning mathematics and physics
+                Our tutors use interactive methods and real-world examples to make learning mathematics and sciences
                 engaging and relevant.
               </p>
               <ul className="space-y-4">
@@ -449,7 +449,7 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Ready to Excel in Mathematics?</h2>
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Ready to Excel in Mathematics and sciences?</h2>
             <p className="mt-4 text-lg text-white/90">
               Book a session with one of our expert tutors today and take the first step towards academic success.
             </p>
