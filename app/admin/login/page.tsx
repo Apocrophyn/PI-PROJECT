@@ -11,6 +11,19 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LockIcon, MailIcon, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+function SearchParamsHandler({ onRedirect }: { onRedirect: (redirectTo: string) => void }) {
+  const searchParams = useSearchParams();
+  
+  useEffect(() => {
+    if (searchParams) {
+      const redirectTo = searchParams.get('redirectTo') || '/admin/dashboard';
+      onRedirect(redirectTo);
+    }
+  }, [searchParams, onRedirect]);
+
+  return null;
+}
+
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,8 +31,17 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [connectionStatus, setConnectionStatus] = useState<string>('Checking connection...');
   const [success, setSuccess] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState('/admin/dashboard');
   const router = useRouter();
-  const searchParams = useSearchParams();
+
+  // Get redirect URL from localStorage on mount
+  useEffect(() => {
+    const storedRedirectUrl = window.localStorage.getItem('redirectUrl');
+    if (storedRedirectUrl) {
+      setRedirectUrl(storedRedirectUrl);
+      window.localStorage.removeItem('redirectUrl'); // Clean up after reading
+    }
+  }, []);
 
   // Check Supabase connection and session on mount
   useEffect(() => {
@@ -86,13 +108,9 @@ function LoginForm() {
         console.log('Login successful, preparing to redirect...');
         setSuccess(true);
         
-        // Get the redirect URL from query params or default to dashboard
-        const redirectTo = searchParams?.get('redirectTo') || '/admin/dashboard';
-        console.log('Redirecting to:', redirectTo);
-
         // Wait for animation before redirecting
         setTimeout(() => {
-          window.location.href = redirectTo;
+          window.location.href = redirectUrl;
         }, 1500);
       } else {
         throw new Error('No user data or session received');
@@ -213,6 +231,9 @@ export default function LoginPage() {
       </div>
     }>
       <LoginForm />
+      <Suspense>
+        <SearchParamsHandler onRedirect={url => window.localStorage.setItem('redirectUrl', url)} />
+      </Suspense>
     </Suspense>
   );
 }
