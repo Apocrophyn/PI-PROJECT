@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
@@ -10,17 +10,38 @@ import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LockIcon } from 'lucide-react';
 
-export default function SetupPasswordPage() {
+// Separate component for handling search params
+function SearchParamsHandler({ onTokenReceived }: { onTokenReceived: (token: string | null) => void }) {
+  const searchParams = useSearchParams();
+  
+  useEffect(() => {
+    const token = searchParams?.get('token');
+    onTokenReceived(token);
+  }, [searchParams, onTokenReceived]);
+  
+  return null;
+}
+
+// Wrapper component for SearchParamsHandler
+function SearchParamsWrapper({ onTokenReceived }: { onTokenReceived: (token: string | null) => void }) {
+  return (
+    <Suspense fallback={<div className="hidden">Loading...</div>}>
+      <SearchParamsHandler onTokenReceived={onTokenReceived} />
+    </Suspense>
+  );
+}
+
+// Main setup password form without search params
+function SetupPasswordForm() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const router = useRouter();
-  const searchParams = useSearchParams();
 
   useEffect(() => {
     const checkToken = async () => {
-      const token = searchParams?.get('token');
       if (!token) {
         setError('Invalid or missing setup token');
         return;
@@ -43,7 +64,7 @@ export default function SetupPasswordPage() {
     };
 
     checkToken();
-  }, [searchParams]);
+  }, [token]);
 
   const handleSetupPassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -63,7 +84,6 @@ export default function SetupPasswordPage() {
     }
 
     try {
-      const token = searchParams?.get('token');
       if (!token) throw new Error('Invalid setup token');
 
       // First verify and sign up with the token
@@ -155,5 +175,17 @@ export default function SetupPasswordPage() {
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+// Export the wrapped component
+export default function SetupPasswordPage() {
+  const [token, setToken] = useState<string | null>(null);
+  
+  return (
+    <>
+      <SearchParamsWrapper onTokenReceived={setToken} />
+      <SetupPasswordForm />
+    </>
   );
 } 
