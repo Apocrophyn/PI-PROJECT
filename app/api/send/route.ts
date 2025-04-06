@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
-import { Resend } from 'resend';
 import ContactFormEmail from '@/emails/contact-form-email';
-
-// Initialize Resend with API key from environment variable
-const resend = new Resend(process.env.RESEND_API_KEY);
+import { sendEmail } from '@/lib/email';
 
 export async function POST(req: Request) {
   try {
@@ -17,9 +14,7 @@ export async function POST(req: Request) {
       contactPreference,
     } = await req.json();
 
-    const data = await resend.emails.send({
-      from: process.env.NEXT_PUBLIC_EMAIL_FROM || 'onboarding@resend.dev',
-      to: ['info@pitutors.com'],
+    const result = await sendEmail({
       subject: `New Contact Form Submission: ${subject}`,
       replyTo: email,
       react: ContactFormEmail({
@@ -33,11 +28,7 @@ export async function POST(req: Request) {
       }),
     });
 
-    if (data.error) {
-      throw new Error(data.error.message);
-    }
-
-    return NextResponse.json({ success: true, data });
+    return NextResponse.json({ success: true, data: result });
   } catch (error) {
     console.error('Error sending email:', error);
     return NextResponse.json(
