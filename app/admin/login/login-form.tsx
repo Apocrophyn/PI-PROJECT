@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
@@ -11,7 +11,22 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LockIcon, MailIcon, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function LoginFormClient() {
+// Separate component for handling search params
+function SearchParamsHandler() {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const redirectTo = searchParams?.get('redirectTo');
+    if (redirectTo) {
+      localStorage.setItem('loginRedirect', redirectTo);
+    }
+  }, [searchParams]);
+
+  return null;
+}
+
+// Main login form without search params
+function LoginFormContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
@@ -19,15 +34,6 @@ export default function LoginFormClient() {
   const [connectionStatus, setConnectionStatus] = useState<string>('Checking connection...');
   const [success, setSuccess] = useState(false);
   const router = useRouter();
-  const searchParams = useSearchParams();
-
-  // Handle redirect on mount
-  useEffect(() => {
-    const redirectTo = searchParams?.get('redirectTo');
-    if (redirectTo) {
-      localStorage.setItem('loginRedirect', redirectTo);
-    }
-  }, [searchParams]);
 
   // Check Supabase connection and session on mount
   useEffect(() => {
@@ -210,5 +216,17 @@ export default function LoginFormClient() {
         </CardFooter>
       </Card>
     </div>
+  );
+}
+
+// Export the wrapped component
+export default function LoginFormClient() {
+  return (
+    <>
+      <Suspense>
+        <SearchParamsHandler />
+      </Suspense>
+      <LoginFormContent />
+    </>
   );
 } 
