@@ -1,7 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Lottie from 'lottie-react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import Lottie with no SSR
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false });
 
 interface LottieProps {
   src: string;
@@ -21,15 +24,17 @@ export function LottieAnimation({
   autoplay = true 
 }: LottieProps) {
   const [animationData, setAnimationData] = useState<any>(null);
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
+    setIsClient(true);
     fetch(src)
       .then(response => response.json())
       .then(data => setAnimationData(data))
       .catch(error => console.error('Error loading animation:', error));
   }, [src]);
 
-  if (!animationData) return null;
+  if (!isClient || !animationData) return null;
 
   return (
     <Lottie
