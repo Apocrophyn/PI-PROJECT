@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,19 +11,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { LockIcon, MailIcon, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-function SearchParamsHandler({ onRedirect }: { onRedirect: (redirectTo: string) => void }) {
-  const searchParams = useSearchParams();
-  
-  useEffect(() => {
-    if (searchParams) {
-      const redirectTo = searchParams.get('redirectTo') || '/admin/dashboard';
-      onRedirect(redirectTo);
-    }
-  }, [searchParams, onRedirect]);
-
-  return null;
-}
-
+// Separate the login form into its own component
 function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -31,17 +19,7 @@ function LoginForm() {
   const [error, setError] = useState<string | null>(null);
   const [connectionStatus, setConnectionStatus] = useState<string>('Checking connection...');
   const [success, setSuccess] = useState(false);
-  const [redirectUrl, setRedirectUrl] = useState('/admin/dashboard');
   const router = useRouter();
-
-  // Get redirect URL from localStorage on mount
-  useEffect(() => {
-    const storedRedirectUrl = window.localStorage.getItem('redirectUrl');
-    if (storedRedirectUrl) {
-      setRedirectUrl(storedRedirectUrl);
-      window.localStorage.removeItem('redirectUrl'); // Clean up after reading
-    }
-  }, []);
 
   // Check Supabase connection and session on mount
   useEffect(() => {
@@ -108,9 +86,13 @@ function LoginForm() {
         console.log('Login successful, preparing to redirect...');
         setSuccess(true);
         
+        // Get redirect URL from localStorage or use default
+        const redirectTo = localStorage.getItem('loginRedirect') || '/admin/dashboard';
+        localStorage.removeItem('loginRedirect'); // Clean up
+
         // Wait for animation before redirecting
         setTimeout(() => {
-          window.location.href = redirectUrl;
+          window.location.href = redirectTo;
         }, 1500);
       } else {
         throw new Error('No user data or session received');
@@ -223,6 +205,24 @@ function LoginForm() {
   );
 }
 
+// Create a separate component for handling search params
+function RedirectHandler() {
+  const router = useRouter();
+  
+  useEffect(() => {
+    // Get the URL's search params directly from window.location
+    const params = new URLSearchParams(window.location.search);
+    const redirectTo = params.get('redirectTo');
+    
+    if (redirectTo) {
+      localStorage.setItem('loginRedirect', redirectTo);
+    }
+  }, []);
+
+  return null;
+}
+
+// Main page component
 export default function LoginPage() {
   return (
     <Suspense fallback={
@@ -230,10 +230,8 @@ export default function LoginPage() {
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       </div>
     }>
+      <RedirectHandler />
       <LoginForm />
-      <Suspense>
-        <SearchParamsHandler onRedirect={url => window.localStorage.setItem('redirectUrl', url)} />
-      </Suspense>
     </Suspense>
   );
 }
