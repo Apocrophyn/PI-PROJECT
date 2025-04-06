@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <!-- Background Elements -->
+  <circle cx="200" cy="150" r="120" fill="url(#homeworkGradient)" opacity="0.1"/>
+  
+  <!-- Notebook Base -->
+  <rect x="120" y="80" width="160" height="180" rx="8" fill="#3B82F6" opacity="0.1" stroke="#3B82F6" stroke-width="2"/>
+  
+  <!-- Animated Lines -->
+  <g>
+    <line x1="140" y1="120" x2="260" y2="120" stroke="#3B82F6" stroke-width="2">
+      <animate
+        attributeName="stroke-dasharray"
+        values="0,120;120,0"
+        dur="2s"
+        repeatCount="indefinite"
+      />
+    </line>
+    <line x1="140" y1="150" x2="220" y2="150" stroke="#EC4899" stroke-width="2">
+      <animate
+        attributeName="stroke-dasharray"
+        values="0,80;80,0"
+        dur="2s"
+        begin="0.5s"
+        repeatCount="indefinite"
+      />
+    </line>
+    <line x1="140" y1="180" x2="240" y2="180" stroke="#3B82F6" stroke-width="2">
+      <animate
+        attributeName="stroke-dasharray"
+        values="0,100;100,0"
+        dur="2s"
+        begin="1s"
+        repeatCount="indefinite"
+      />
+    </line>
+  </g>
+  
+  <!-- Floating Elements -->
+  <g transform="translate(280, 70)">
+    <rect width="30" height="30" rx="6" fill="#EC4899" opacity="0.2">
+      <animate
+        attributeName="transform"
+        values="translate(0,0); translate(0,10); translate(0,0)"
+        dur="3s"
+        repeatCount="indefinite"
+      />
+    </rect>
+    <text x="15" y="20" text-anchor="middle" fill="#EC4899" font-size="16">✓</text>
+  </g>
+  
+  <g transform="translate(90, 180)">
+    <rect width="30" height="30" rx="6" fill="#3B82F6" opacity="0.2">
+      <animate
+        attributeName="transform"
+        values="translate(0,0); translate(0,-10); translate(0,0)"
+        dur="3s"
+        begin="1s"
+        repeatCount="indefinite"
+      />
+    </rect>
+    <text x="15" y="20" text-anchor="middle" fill="#3B82F6" font-size="16">✎</text>
+  </g>
+  
+  <!-- Pencil Animation -->
+  <g transform="translate(200, 220)">
+    <path d="M0,0 L20,-10 L40,0 L20,10 Z" fill="#3B82F6" opacity="0.3">
+      <animateTransform
+        attributeName="transform"
+        type="rotate"
+        values="0;10;-10;0"
+        dur="4s"
+        repeatCount="indefinite"
+      />
+    </path>
+  </g>
+  
+  <!-- Gradients -->
+  <defs>
+    <radialGradient id="homeworkGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" style="stop-color:#EC4899;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+</svg>

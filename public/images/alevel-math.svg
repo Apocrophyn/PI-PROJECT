@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e293b;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bg-gradient)" />
+
+  <!-- Calculus Section -->
+  <g transform="translate(100,80)" class="calculus" fill="#3b82f6" font-family="Arial" font-size="18">
+    <!-- Integration Symbol -->
+    <text x="0" y="0" font-size="24">
+      ∫
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3s" repeatCount="indefinite" />
+    </text>
+    <text x="20" y="0" font-size="18">
+      e^x dx
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3s" begin="0.5s" repeatCount="indefinite" />
+    </text>
+
+    <!-- Derivative -->
+    <text x="0" y="40">
+      d/dx[sin(x)] = cos(x)
+      <animate attributeName="opacity" values="0.2;1;0.2" dur="3s" begin="1s" repeatCount="indefinite" />
+    </text>
+  </g>
+
+  <!-- Complex Numbers -->
+  <g transform="translate(300,80)" class="complex" fill="#60a5fa" font-family="Arial" font-size="16">
+    <text x="0" y="0" text-anchor="middle">
+      z = a + bi
+      <animate attributeName="y" values="0;-10;0" dur="4s" repeatCount="indefinite" />
+    </text>
+    <text x="0" y="30" text-anchor="middle">
+      e^(iπ) + 1 = 0
+      <animate attributeName="y" values="30;20;30" dur="4s" begin="1s" repeatCount="indefinite" />
+    </text>
+  </g>
+
+  <!-- Animated Function Graph -->
+  <g transform="translate(200,200)" class="graph">
+    <!-- Sine Wave -->
+    <path d="" fill="none" stroke="#3b82f6" stroke-width="2">
+      <animate attributeName="d" values="M-100,0 C-75,-20 -25,20 0,0 C25,-20 75,20 100,0;M-100,0 C-75,20 -25,-20 0,0 C25,20 75,-20 100,0;M-100,0 C-75,-20 -25,20 0,0 C25,-20 75,20 100,0" dur="4s" repeatCount="indefinite" />
+    </path>
+
+    <!-- Moving Point on Curve -->
+    <circle r="3" fill="#60a5fa">
+      <animateMotion dur="4s" repeatCount="indefinite"
+        path="M-100,0 C-75,-20 -25,20 0,0 C25,-20 75,20 100,0" />
+    </circle>
+  </g>
+
+  <!-- Matrix -->
+  <g transform="translate(100,200)" class="matrix" fill="#60a5fa" font-family="Arial" font-size="14">
+    <text x="0" y="0">[</text>
+    <text x="10" y="-10">a b</text>
+    <text x="10" y="10">c d</text>
+    <text x="30" y="0">]</text>
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="0 100 200"
+      to="360 100 200"
+      dur="10s"
+      repeatCount="indefinite"
+    />
+  </g>
+
+  <!-- Vectors -->
+  <g transform="translate(300,200)" class="vectors" stroke="#3b82f6" stroke-width="2">
+    <line x1="0" y1="0" x2="30" y2="-30">
+      <animate attributeName="x2" values="30;40;30" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="y2" values="-30;-40;-30" dur="3s" repeatCount="indefinite" />
+    </line>
+    <line x1="0" y1="0" x2="-30" y2="30">
+      <animate attributeName="x2" values="-30;-40;-30" dur="3s" repeatCount="indefinite" />
+      <animate attributeName="y2" values="30;40;30" dur="3s" repeatCount="indefinite" />
+    </line>
+  </g>
+</svg>

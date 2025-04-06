@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0f172a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e293b;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#bg)" />
+  
+  <!-- Computer Screen Frame -->
+  <g transform="translate(200,100)">
+    <rect x="0" y="0" width="400" height="300" rx="10" fill="#475569" />
+    <rect x="10" y="10" width="380" height="280" rx="5" fill="#1e293b" />
+    
+    <!-- Screen Content -->
+    <g transform="translate(20,20)">
+      <!-- Video Call Windows -->
+      <rect x="0" y="0" width="180" height="120" rx="5" fill="#60a5fa" opacity="0.8" />
+      <rect x="190" y="0" width="180" height="120" rx="5" fill="#818cf8" opacity="0.8" />
+      
+      <!-- Digital Whiteboard -->
+      <rect x="0" y="130" width="360" height="140" rx="5" fill="#f8fafc" />
+      
+      <!-- Mathematical Content on Whiteboard -->
+      <g transform="translate(20,150)" fill="#0f172a">
+        <text font-family="Arial" font-size="16">y = mx + c</text>
+        <path d="M 50 30 L 150 30" stroke="#0f172a" stroke-width="2" />
+        <text x="180" y="0" font-family="Arial" font-size="16">∫ f(x)dx</text>
+        <circle cx="200" cy="50" r="20" stroke="#0f172a" fill="none" stroke-width="2" />
+      </g>
+    </g>
+  </g>
+  
+  <!-- Digital Elements -->
+  <g opacity="0.6">
+    <!-- Chat Messages -->
+    <g transform="translate(620,150)">
+      <rect x="0" y="0" width="120" height="30" rx="15" fill="#60a5fa" />
+      <rect x="0" y="40" width="120" height="30" rx="15" fill="#94a3b8" />
+      <rect x="0" y="80" width="120" height="30" rx="15" fill="#60a5fa" />
+    </g>
+    
+    <!-- Tools Icons -->
+    <g transform="translate(50,150)">
+      <circle cx="0" cy="0" r="15" fill="#60a5fa" />
+      <circle cx="0" cy="40" r="15" fill="#60a5fa" />
+      <circle cx="0" cy="80" r="15" fill="#60a5fa" />
+    </g>
+  </g>
+  
+  <!-- Connection Lines -->
+  <g stroke="#60a5fa" stroke-width="2" stroke-dasharray="5,5" opacity="0.4">
+    <path d="M 100 500 C 200 400 400 400 500 500" fill="none" />
+    <path d="M 200 500 C 300 400 500 400 600 500" fill="none" />
+  </g>
+  
+  <!-- Decorative Elements -->
+  <g opacity="0.2">
+    <circle cx="100" cy="100" r="20" fill="#60a5fa" />
+    <circle cx="700" cy="500" r="30" fill="#60a5fa" />
+    <circle cx="400" cy="50" r="15" fill="#60a5fa" />
+  </g>
+  
+  <!-- Binary Code Background -->
+  <g fill="#60a5fa" opacity="0.1" font-family="monospace" font-size="12">
+    <text x="50" y="550">10110101</text>
+    <text x="150" y="550">01001010</text>
+    <text x="250" y="550">11100111</text>
+    <text x="350" y="550">00110011</text>
+    <text x="450" y="550">10011100</text>
+    <text x="550" y="550">01101001</text>
+    <text x="650" y="550">11010110</text>
+  </g>
+</svg>

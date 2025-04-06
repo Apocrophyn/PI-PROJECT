@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .icon-bg { fill: #1f2937; }
+    .icon-primary { fill: #3b82f6; }
+    .icon-secondary { fill: #6366f1; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .floating {
+      animation: float 3s ease-in-out infinite;
+    }
+  </style>
+  
+  <!-- KS3 Mathematics Icon -->
+  <g class="floating" style="animation-delay: 0s" transform="translate(100, 100)">
+    <circle class="icon-bg" cx="100" cy="100" r="80" />
+    <path class="icon-primary" d="M70,100 h60 M100,70 v60" stroke-width="8" />
+    <circle class="icon-secondary" cx="100" cy="100" r="40" fill="none" stroke-width="4" stroke="#6366f1" />
+  </g>
+  
+  <!-- GCSE Mathematics Icon -->
+  <g class="floating" style="animation-delay: 1s" transform="translate(300, 100)">
+    <circle class="icon-bg" cx="100" cy="100" r="80" />
+    <path class="icon-primary" d="M60,80 h80 l-40,60 l-40,-60" fill="none" stroke-width="8" />
+    <path class="icon-secondary" d="M80,120 h40" stroke-width="8" />
+  </g>
+  
+  <!-- A-Level Mathematics Icon -->
+  <g class="floating" style="animation-delay: 2s" transform="translate(500, 100)">
+    <circle class="icon-bg" cx="100" cy="100" r="80" />
+    <path class="icon-primary" d="M70,130 c0,-60 60,-60 60,0" fill="none" stroke-width="8" />
+    <path class="icon-secondary" d="M70,70 l60,60 M70,130 l60,-60" stroke-width="8" />
+  </g>
+  
+  <!-- Physics Icon -->
+  <g class="floating" style="animation-delay: 0.5s" transform="translate(200, 300)">
+    <circle class="icon-bg" cx="100" cy="100" r="80" />
+    <circle class="icon-primary" cx="100" cy="100" r="30" />
+    <ellipse class="icon-secondary" cx="100" cy="100" rx="60" ry="20" fill="none" stroke-width="4" stroke="#6366f1" transform="rotate(45 100 100)" />
+    <ellipse class="icon-secondary" cx="100" cy="100" rx="60" ry="20" fill="none" stroke-width="4" stroke="#6366f1" transform="rotate(-45 100 100)" />
+  </g>
+  
+  <!-- Online Tutoring Icon -->
+  <g class="floating" style="animation-delay: 1.5s" transform="translate(400, 300)">
+    <circle class="icon-bg" cx="100" cy="100" r="80" />
+    <rect class="icon-primary" x="60" y="70" width="80" height="60" rx="5" />
+    <path class="icon-secondary" d="M70,140 l30,-20 l30,20" fill="none" stroke-width="4" stroke="#6366f1" />
+  </g>
+</svg>

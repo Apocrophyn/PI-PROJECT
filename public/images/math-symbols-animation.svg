@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="300" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradient for the circle -->
+    <radialGradient id="circleGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.8"/>
+      <stop offset="100%" stop-color="#ec4899" stop-opacity="0.6"/>
+    </radialGradient>
+    
+    <!-- Filter for glow effect -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+  </defs>
+  
+  <style>
+    /* Base styles */
+    .math-circle { fill: url(#circleGradient); opacity: 0.8; }
+    .math-symbol { fill: white; filter: url(#glow); }
+    .particle { fill: white; }
+    
+    /* Animations */
+    @keyframes float {
+      0% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
+      100% { transform: translateY(0px) rotate(0deg); }
+    }
+    
+    @keyframes pulse {
+      0% { opacity: 0.7; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+      100% { opacity: 0.7; transform: scale(1); }
+    }
+    
+    @keyframes particle-float {
+      0% { transform: translate(0, 0); opacity: 0; }
+      50% { opacity: 0.8; }
+      100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Apply animations */
+    .math-circle {
+      animation: pulse 4s ease-in-out infinite;
+    }
+    
+    #pi {
+      animation: float 6s ease-in-out infinite;
+      animation-delay: 0.5s;
+    }
+    
+    #sigma {
+      animation: float 7s ease-in-out infinite;
+      animation-delay: 1s;
+    }
+    
+    #infinity {
+      animation: float 5s ease-in-out infinite;
+      animation-delay: 0s;
+    }
+    
+    #equation {
+      animation: float 8s ease-in-out infinite;
+      animation-delay: 1.5s;
+    }
+    
+    #sqrt {
+      animation: float 6.5s ease-in-out infinite;
+      animation-delay: 0.8s;
+    }
+    
+    .particle-1 { --tx: -20px; --ty: -30px; animation: particle-float 3s ease-in-out infinite; }
+    .particle-2 { --tx: 30px; --ty: -25px; animation: particle-float 4s ease-in-out infinite; animation-delay: 0.5s; }
+    .particle-3 { --tx: -25px; --ty: 20px; animation: particle-float 3.5s ease-in-out infinite; animation-delay: 1s; }
+    .particle-4 { --tx: 20px; --ty: 30px; animation: particle-float 4.5s ease-in-out infinite; animation-delay: 1.5s; }
+    .particle-5 { --tx: -30px; --ty: 10px; animation: particle-float 5s ease-in-out infinite; animation-delay: 2s; }
+    .particle-6 { --tx: 15px; --ty: -35px; animation: particle-float 3.8s ease-in-out infinite; animation-delay: 0.3s; }
+    
+    .rotating-ring {
+      animation: rotate 20s linear infinite;
+    }
+  </style>
+  
+  <!-- Main Circle -->
+  <circle cx="150" cy="150" r="120" class="math-circle"/>
+  
+  <!-- Rotating Ring -->
+  <g class="rotating-ring">
+    <circle cx="150" cy="50" r="4" fill="white" opacity="0.6"/>
+    <circle cx="250" cy="150" r="4" fill="white" opacity="0.6"/>
+    <circle cx="150" cy="250" r="4" fill="white" opacity="0.6"/>
+    <circle cx="50" cy="150" r="4" fill="white" opacity="0.6"/>
+    
+    <circle cx="115" cy="65" r="3" fill="white" opacity="0.4"/>
+    <circle cx="235" cy="115" r="3" fill="white" opacity="0.4"/>
+    <circle cx="185" cy="235" r="3" fill="white" opacity="0.4"/>
+    <circle cx="65" cy="185" r="3" fill="white" opacity="0.4"/>
+  </g>
+  
+  <!-- Particles -->
+  <circle cx="150" cy="150" r="2" class="particle particle-1"/>
+  <circle cx="150" cy="150" r="2" class="particle particle-2"/>
+  <circle cx="150" cy="150" r="2" class="particle particle-3"/>
+  <circle cx="150" cy="150" r="2" class="particle particle-4"/>
+  <circle cx="150" cy="150" r="2" class="particle particle-5"/>
+  <circle cx="150" cy="150" r="2" class="particle particle-6"/>
+  
+  <!-- Mathematical Symbols -->
+  <g id="pi" transform="translate(110, 120)">
+    <path class="math-symbol" d="M0,0 H30 M5,0 V25 M25,0 V25" stroke="white" stroke-width="3" fill="none"/>
+  </g>
+  
+  <g id="sigma" transform="translate(160, 160)">
+    <path class="math-symbol" d="M0,0 H30 M0,0 L15,15 L0,30 M0,30 H30" stroke="white" stroke-width="3" fill="none"/>
+  </g>
+  
+  <g id="infinity" transform="translate(90, 170)">
+    <path class="math-symbol" d="M5,15 C5,10 10,5 15,5 C20,5 25,10 25,15 C25,20 20,25 15,25 C10,25 5,20 5,15 Z M25,15 C25,10 30,5 35,5 C40,5 45,10 45,15 C45,20 40,25 35,25 C30,25 25,20 25,15 Z" stroke="white" stroke-width="2" fill="none"/>
+  </g>
+  
+  <g id="equation" transform="translate(150, 90)">
+    <path class="math-symbol" d="M0,10 H30 M0,20 H30 M40,5 L50,25 M60,5 H80 M60,15 H80 M60,25 H80" stroke="white" stroke-width="2" fill="none"/>
+  </g>
+  
+  <g id="sqrt" transform="translate(170, 130)">
+    <path class="math-symbol" d="M0,15 L10,25 L20,0 H40" stroke="white" stroke-width="2" fill="none"/>
+  </g>
+</svg>

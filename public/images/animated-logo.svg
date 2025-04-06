@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .pi-symbol { fill: #3b82f6; }
+    .circle { fill: none; stroke: #3b82f6; stroke-width: 4; }
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes pulse {
+      0% { opacity: 0.6; }
+      50% { opacity: 1; }
+      100% { opacity: 0.6; }
+    }
+    .rotating-circle {
+      animation: rotate 10s linear infinite;
+    }
+    .pulsing-pi {
+      animation: pulse 2s ease-in-out infinite;
+    }
+  </style>
+  
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="45" class="circle" />
+  
+  <!-- Rotating Mathematical Elements -->
+  <g class="rotating-circle">
+    <circle cx="50" cy="15" r="3" fill="#3b82f6" />
+    <circle cx="85" cy="50" r="3" fill="#3b82f6" />
+    <circle cx="50" cy="85" r="3" fill="#3b82f6" />
+    <circle cx="15" cy="50" r="3" fill="#3b82f6" />
+  </g>
+  
+  <!-- PI Symbol -->
+  <g class="pulsing-pi" transform="translate(30, 35)">
+    <path class="pi-symbol" d="M10,30 V10 H0 M10,10 H30 M30,10 V30" stroke="#3b82f6" stroke-width="4" fill="none"/>
+  </g>
+</svg>

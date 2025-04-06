@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="800" viewBox="0 0 800 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg-gradient" x1="0" y1="0" x2="800" y2="800">
+      <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#16213e;stop-opacity:1" />
+    </linearGradient>
+    
+    <style type="text/css">
+      .grow-circle { animation: grow 2s ease-out forwards; }
+      .fade-in { animation: fadeIn 2s ease-out forwards; }
+      .slide-in { animation: slideIn 2s ease-out forwards; }
+      .pulse { animation: pulse 2s infinite; }
+      
+      @keyframes grow {
+        from { transform: scale(0); }
+        to { transform: scale(1); }
+      }
+      
+      @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+      }
+      
+      @keyframes slideIn {
+        from { transform: translateX(-100px); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+      
+      @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+        100% { transform: scale(1); }
+      }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="800" height="800" fill="url(#bg-gradient)" />
+  
+  <!-- Growth path with gradient -->
+  <path d="M200,600 Q400,400 600,200" stroke="url(#line-gradient)" stroke-width="4" stroke-dasharray="8,8" class="fade-in" fill="none">
+    <linearGradient id="line-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+    </linearGradient>
+  </path>
+  
+  <!-- Starting point: Small tutoring service -->
+  <g transform="translate(150,550)" class="grow-circle">
+    <circle cx="50" cy="50" r="40" fill="#1e3a8a" class="pulse" />
+    <text x="50" y="45" text-anchor="middle" fill="white" font-size="12" font-family="sans-serif">Small</text>
+    <text x="50" y="60" text-anchor="middle" fill="white" font-size="12" font-family="sans-serif">Beginnings</text>
+  </g>
+  
+  <!-- Middle stage: Growing institution -->
+  <g transform="translate(350,350)" class="grow-circle">
+    <circle cx="50" cy="50" r="50" fill="#2563eb" class="pulse" />
+    <text x="50" y="45" text-anchor="middle" fill="white" font-size="14" font-family="sans-serif">Growing</text>
+    <text x="50" y="60" text-anchor="middle" fill="white" font-size="14" font-family="sans-serif">Impact</text>
+  </g>
+  
+  <!-- Current stage: Respected institution -->
+  <g transform="translate(550,150)" class="grow-circle">
+    <circle cx="50" cy="50" r="60" fill="#3b82f6" class="pulse" />
+    <text x="50" y="45" text-anchor="middle" fill="white" font-size="16" font-family="sans-serif">Respected</text>
+    <text x="50" y="60" text-anchor="middle" fill="white" font-size="16" font-family="sans-serif">Institution</text>
+  </g>
+  
+  <!-- Educational symbols with animations -->
+  <g class="slide-in">
+    <!-- Books -->
+    <g transform="translate(180,440)">
+      <rect width="40" height="60" fill="#60a5fa" />
+      <rect x="10" y="-10" width="40" height="60" fill="#93c5fd" />
+    </g>
+    
+    <!-- Graduation cap -->
+    <g transform="translate(400,280)">
+      <path d="M0,0 l30,-20 l30,20 l-30,20 z" fill="#60a5fa" />
+      <path d="M0,0 v30 l30,-10 v-30" fill="#93c5fd" />
+    </g>
+    
+    <!-- Mathematical symbols -->
+    <g transform="translate(600,230)">
+      <text fill="#60a5fa" font-size="24" font-family="serif">π</text>
+      <text x="30" fill="#93c5fd" font-size="24" font-family="serif">∑</text>
+    </g>
+  </g>
+  
+  <!-- Connecting lines with gradient -->
+  <g class="fade-in">
+    <path d="M250,550 C300,500 350,450 400,400" stroke="#60a5fa" stroke-width="2" fill="none" />
+    <path d="M450,350 C500,300 550,250 600,200" stroke="#60a5fa" stroke-width="2" fill="none" />
+  </g>
+</svg>

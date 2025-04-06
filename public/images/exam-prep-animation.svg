@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <!-- Background Elements -->
+  <circle cx="200" cy="150" r="120" fill="url(#examGradient)" opacity="0.1"/>
+  
+  <!-- Clock Face -->
+  <circle cx="200" cy="150" r="80" stroke="#3B82F6" stroke-width="4" fill="none"/>
+  <line x1="200" y1="150" x2="200" y2="100" stroke="#3B82F6" stroke-width="4" stroke-linecap="round">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="0 200 150"
+      to="360 200 150"
+      dur="60s"
+      repeatCount="indefinite"
+    />
+  </line>
+  <line x1="200" y1="150" x2="240" y2="150" stroke="#EC4899" stroke-width="4" stroke-linecap="round">
+    <animateTransform
+      attributeName="transform"
+      type="rotate"
+      from="0 200 150"
+      to="360 200 150"
+      dur="3600s"
+      repeatCount="indefinite"
+    />
+  </line>
+  
+  <!-- Floating Elements -->
+  <g transform="translate(120, 80)">
+    <rect width="40" height="40" rx="8" fill="#3B82F6" opacity="0.2">
+      <animate
+        attributeName="opacity"
+        values="0.2;0.5;0.2"
+        dur="3s"
+        repeatCount="indefinite"
+      />
+    </rect>
+    <text x="20" y="25" text-anchor="middle" fill="#3B82F6" font-size="20">+</text>
+  </g>
+  
+  <g transform="translate(260, 200)">
+    <rect width="40" height="40" rx="8" fill="#EC4899" opacity="0.2">
+      <animate
+        attributeName="opacity"
+        values="0.2;0.5;0.2"
+        dur="3s"
+        repeatCount="indefinite"
+        begin="1s"
+      />
+    </rect>
+    <text x="20" y="25" text-anchor="middle" fill="#EC4899" font-size="20">÷</text>
+  </g>
+  
+  <g transform="translate(280, 100)">
+    <rect width="40" height="40" rx="8" fill="#3B82F6" opacity="0.2">
+      <animate
+        attributeName="opacity"
+        values="0.2;0.5;0.2"
+        dur="3s"
+        repeatCount="indefinite"
+        begin="2s"
+      />
+    </rect>
+    <text x="20" y="25" text-anchor="middle" fill="#3B82F6" font-size="20">×</text>
+  </g>
+  
+  <!-- Gradients -->
+  <defs>
+    <radialGradient id="examGradient" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+      <stop offset="0%" style="stop-color:#3B82F6;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#EC4899;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+</svg>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a365d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d3748;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Animation paths -->
+    <path id="formulaPath" d="M100,300 Q400,100 700,300" fill="none" />
+    <path id="circlePath" d="M400,300 m-150,0 a150,150 0 1,1 300,0 a150,150 0 1,1 -300,0" fill="none" />
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="url(#bgGradient)" />
+
+  <!-- Grid pattern -->
+  <pattern id="grid" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#4a5568" stroke-width="0.5" />
+  </pattern>
+  <rect width="100%" height="100%" fill="url(#grid)" opacity="0.3" />
+
+  <!-- Animated mathematical symbols -->
+  <g class="symbols" fill="#63b3ed" opacity="0.8">
+    <!-- Pi symbol -->
+    <text font-family="serif" font-size="40" x="200" y="200">
+      <animate attributeName="opacity" values="0;1;0" dur="4s" repeatCount="indefinite" />
+      π
+    </text>
+    
+    <!-- Sigma symbol -->
+    <text font-family="serif" font-size="40" x="500" y="400">
+      <animate attributeName="opacity" values="0;1;0" dur="4s" begin="1s" repeatCount="indefinite" />
+      Σ
+    </text>
+    
+    <!-- Infinity symbol -->
+    <text font-family="serif" font-size="40" x="350" y="300">
+      <animate attributeName="opacity" values="0;1;0" dur="4s" begin="2s" repeatCount="indefinite" />
+      ∞
+    </text>
+  </g>
+
+  <!-- Animated formulas -->
+  <g class="formulas" fill="#90cdf4" font-family="monospace">
+    <text font-size="16">
+      <textPath href="#formulaPath">
+        <animate attributeName="startOffset" from="0%" to="100%" dur="10s" repeatCount="indefinite" />
+        E = mc² • F = ma • PV = nRT • ∫(x²)dx
+      </textPath>
+    </text>
+  </g>
+
+  <!-- Animated circle with mathematical symbols -->
+  <g class="rotating-symbols" fill="#4299e1">
+    <text font-size="14">
+      <textPath href="#circlePath">
+        <animate attributeName="startOffset" from="0%" to="100%" dur="20s" repeatCount="indefinite" />
+        + − × ÷ = ≠ ≈ ∞ ∑ ∏ √ ∫ ∂ ∇ ∆ π θ λ μ σ Ω
+      </textPath>
+    </text>
+  </g>
+
+  <!-- Pulsing central icon -->
+  <g transform="translate(400,300)">
+    <circle r="50" fill="#2b6cb0" opacity="0.3">
+      <animate attributeName="r" values="50;60;50" dur="2s" repeatCount="indefinite" />
+      <animate attributeName="opacity" values="0.3;0.5;0.3" dur="2s" repeatCount="indefinite" />
+    </circle>
+    <text font-family="serif" font-size="60" fill="#63b3ed" text-anchor="middle" dy="20">π</text>
+  </g>
+</svg>
