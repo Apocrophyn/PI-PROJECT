@@ -25,6 +25,15 @@ function SearchParamsHandler() {
   return null;
 }
 
+// Wrapper component for SearchParamsHandler
+function SearchParamsWrapper() {
+  return (
+    <Suspense fallback={null}>
+      <SearchParamsHandler />
+    </Suspense>
+  );
+}
+
 // Main login form without search params
 function LoginFormContent() {
   const [email, setEmail] = useState('');
@@ -223,9 +232,7 @@ function LoginFormContent() {
 export default function LoginFormClient() {
   return (
     <>
-      <Suspense>
-        <SearchParamsHandler />
-      </Suspense>
+      <SearchParamsWrapper />
       <LoginFormContent />
     </>
   );
