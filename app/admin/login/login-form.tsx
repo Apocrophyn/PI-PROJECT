@@ -28,7 +28,7 @@ function SearchParamsHandler() {
 // Wrapper component for SearchParamsHandler
 function SearchParamsWrapper() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<div className="hidden">Loading...</div>}>
       <SearchParamsHandler />
     </Suspense>
   );
