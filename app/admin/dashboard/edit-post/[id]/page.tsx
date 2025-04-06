@@ -45,8 +45,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import FontFamily from '@tiptap/extension-font-family';
 
 export default function EditPostPage({ params }: { params: { id: string } }) {
-  const resolvedParams = use(params) as { id: string };
-  const postId = resolvedParams.id;
+  const postId = params.id;
   const isNewPost = postId === 'new';
   const [post, setPost] = useState<Partial<BlogPost>>({
     title: '',
@@ -201,6 +200,8 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
 
   // Add custom styles to the document head
   useEffect(() => {
+    if (typeof window === 'undefined') return;
+
     const style = document.createElement('style');
     style.textContent = `
       .ProseMirror h1 { font-size: 2.5em !important; font-weight: bold; margin: 1em 0 0.5em; line-height: 1.2; color: rgb(17 24 39); }
@@ -215,7 +216,9 @@ export default function EditPostPage({ params }: { params: { id: string } }) {
     `;
     document.head.appendChild(style);
     return () => {
-      document.head.removeChild(style);
+      if (style.parentNode) {
+        document.head.removeChild(style);
+      }
     };
   }, []);
 
