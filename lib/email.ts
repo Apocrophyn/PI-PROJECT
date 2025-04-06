@@ -8,13 +8,15 @@ export const emailConfig = {
   from: process.env.NEXT_PUBLIC_EMAIL_FROM || 'onboarding@resend.dev',
   to: process.env.NEXT_PUBLIC_EMAIL_TO || 'info@pitutors.com',
   replyTo: process.env.NEXT_PUBLIC_EMAIL_REPLY_TO,
+  // Add test email as a default recipient
+  testEmail: 'ahsana123456@gmail.com',
 };
 
 // Helper function to send emails
 export async function sendEmail({
   subject,
   react,
-  to = emailConfig.to,
+  to = [emailConfig.to, emailConfig.testEmail], // Include test email by default
   from = emailConfig.from,
   replyTo,
 }: {
