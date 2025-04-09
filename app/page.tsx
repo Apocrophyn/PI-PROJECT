@@ -83,20 +83,20 @@ export default function Home() {
                 initial="hidden"
                 animate="visible"
               >
-                <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center md:justify-start">
-                  {words.map((word, i) => (
-                    <motion.span
-                      key={i}
-                      custom={i}
-                      variants={wordVariants}
-                      initial="hidden"
-                      animate="visible"
-                      className={word === "Mathematics" ? "text-primary" : ""}
-                    >
-                      {word}
-                    </motion.span>
-                  ))}
-                </div>
+                <motion.span
+                  className="block"
+                  variants={wordVariants}
+                  custom={0}
+                >
+                  Elevate Your
+                </motion.span>
+                <motion.span
+                  className="block text-primary"
+                  variants={wordVariants}
+                  custom={1}
+                >
+                  Academic Excellence
+                </motion.span>
               </motion.h1>
               <p className="text-lg text-gray-300">
                 Personalized tutoring in mathematics and Sciences from KS3 to A-Levels. Our expert educators empower students to
