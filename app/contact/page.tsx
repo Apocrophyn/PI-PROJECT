@@ -115,9 +115,9 @@ export default function ContactPage() {
                   <Phone className="h-6 w-6 text-primary" />
                 </div>
                 <h3 className="text-lg font-medium text-white">Phone</h3>
-                <p className="mt-2 text-gray-400">722-337-879</p>
+                <p className="mt-2 text-gray-400">07588 609243</p>
                 <Button variant="link" className="mt-2 p-0 text-primary" asChild>
-                  <a href="tel:722337879">Call Us</a>
+                  <a href="tel:07588609243">Call Us</a>
                 </Button>
               </CardContent>
             </Card>
