@@ -10,28 +10,19 @@ import { cn } from "@/lib/utils"
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "PI Tutors - Expert Math Tutoring Services",
-  description:
-    "Professional tutoring services specializing in mathematics and physics. Find the perfect tutor to help you excel in your studies.",
+  title: {
+    default: "PI Tutors | Expert Math & Sciences Tutoring",
+    template: "%s | PI Tutors",
+  },
+  description: "Expert tutoring in mathematics and sciences from KS3 to A-Levels. Our expert educators empower students to master complex concepts and achieve remarkable academic success.",
   generator: 'v0.dev',
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
-    other: [
+    icon: [
       {
-        rel: 'icon',
-        type: 'image/png',
-        sizes: '32x32',
-        url: '/favicon-32x32.png',
-      },
-      {
-        rel: 'icon',
-        type: 'image/png',
-        sizes: '16x16',
-        url: '/favicon-16x16.png',
+        url: "/favicon.svg",
+        type: "image/svg+xml",
       }
-    ]
+    ],
   }
 }
 

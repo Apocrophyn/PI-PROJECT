@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="piGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Circle border -->
+  <circle cx="16" cy="16" r="15" fill="none" stroke="url(#piGradient)" stroke-width="1.5" />
+  
+  <!-- Static Pi Symbol -->
+  <g>
+    <!-- Left vertical line of pi -->
+    <rect x="10" y="8" width="2" height="16" rx="1" fill="url(#piGradient)" />
+    
+    <!-- Right vertical line of pi -->
+    <rect x="20" y="8" width="2" height="16" rx="1" fill="url(#piGradient)" />
+    
+    <!-- Horizontal line of pi -->
+    <rect x="10" y="8" width="12" height="2" rx="1" fill="url(#piGradient)" />
+  </g>
+</svg> 
