@@ -31,6 +31,33 @@ export default function Home() {
     },
   }
 
+  const textVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  }
+
+  const wordVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: i * 0.1,
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    })
+  }
+
+  const words = ["Making", "Mathematics", "Fun", "and", "Engaging"]
+
   return (
     <div className="flex flex-col min-h-screen bg-gray-950">
       {/* Hero Section */}
@@ -50,10 +77,27 @@ export default function Home() {
               <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
                 Expert Math & Sciences Tutoring
               </div>
-              <h1 className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl">
-                <span className="block">Elevate Your</span>
-                <span className="block text-primary">Academic Excellence</span>
-              </h1>
+              <motion.h1 
+                className="text-4xl font-bold tracking-tight text-white sm:text-5xl md:text-6xl space-y-2"
+                variants={textVariants}
+                initial="hidden"
+                animate="visible"
+              >
+                <div className="flex flex-wrap gap-x-4 gap-y-2 justify-center md:justify-start">
+                  {words.map((word, i) => (
+                    <motion.span
+                      key={i}
+                      custom={i}
+                      variants={wordVariants}
+                      initial="hidden"
+                      animate="visible"
+                      className={word === "Mathematics" ? "text-primary" : ""}
+                    >
+                      {word}
+                    </motion.span>
+                  ))}
+                </div>
+              </motion.h1>
               <p className="text-lg text-gray-300">
                 Personalized tutoring in mathematics and Sciences from KS3 to A-Levels. Our expert educators empower students to
                 master complex concepts and achieve remarkable academic success.
