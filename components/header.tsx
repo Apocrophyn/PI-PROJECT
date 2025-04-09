@@ -70,7 +70,7 @@ export default function Header() {
                 transition={{ duration: 0.5 }}
                 className="text-xl font-bold text-white"
               >
-                PI Tutors
+                PI TUTORS
               </motion.span>
             </Link>
           </div>
@@ -83,17 +83,21 @@ export default function Header() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="relative group"
               >
+                <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                <div className="absolute -inset-2 bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10 rounded-lg opacity-0 group-hover:opacity-100 transition duration-500 hover:scale-105 transform-gpu"></div>
                 <Link
                   href={item.href}
                   className={cn(
-                    "px-3 py-2 text-sm font-medium rounded-md transition-colors",
+                    "relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-300",
                     pathname === item.href
                       ? "text-primary bg-primary/10"
-                      : "text-gray-300 hover:text-primary hover:bg-primary/10",
+                      : "text-gray-300 hover:text-primary group-hover:bg-primary/5",
                   )}
                 >
                   {item.name}
+                  <div className="absolute inset-0 rounded-md bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 </Link>
               </motion.div>
             ))}
@@ -101,8 +105,10 @@ export default function Header() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: 0.6 }}
+              className="relative group"
             >
-              <Button className="ml-4 bg-primary hover:bg-primary/90 text-white" size="sm" asChild>
+              <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary rounded-lg blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
+              <Button className="relative ml-4 bg-primary hover:bg-primary/90 text-white transition-all duration-300 hover:scale-105 transform-gpu" size="sm" asChild>
                 <Link href="/contact">Book a Tutor</Link>
               </Button>
             </motion.div>
