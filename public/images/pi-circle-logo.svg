@@ -1,20 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Gradient Background Circle -->
-  <circle cx="256" cy="256" r="240" fill="url(#gradient)" />
-  
-  <!-- PI Symbol -->
-  <path d="M156 156h200v40h-30v160h-40V196h-90v160h-40V196h-30v-40z" fill="white"/>
-  
-  <!-- Mathematical Elements -->
-  <path d="M386 256l-20 20m0-40l20 20m-260 0l20 20m0-40l-20 20" stroke="white" stroke-width="8"/>
-  <path d="M256 386v-20m0-240v20" stroke="white" stroke-width="8"/>
-  
-  <!-- Gradient Definition -->
+<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="gradient" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop offset="0%" style="stop-color:#3B82F6"/>
-      <stop offset="100%" style="stop-color:#EC4899"/>
+    <linearGradient id="piGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" /> <!-- Blue -->
+      <stop offset="100%" stop-color="#8b5cf6" /> <!-- Purple -->
     </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
   </defs>
+  
+  <style>
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+    .pi-symbol {
+      animation: float 3s ease-in-out infinite;
+    }
+    .math-element {
+      opacity: 0.7;
+    }
+  </style>
+  
+  <!-- Subtle background circle -->
+  <circle cx="50" cy="50" r="45" fill="none" stroke="url(#piGradient)" stroke-width="2" opacity="0.3" />
+  
+  <!-- Mathematical elements in background -->
+  <g class="math-element">
+    <path d="M15,25 L25,15" stroke="url(#piGradient)" stroke-width="1.5" />
+    <path d="M75,25 L85,15" stroke="url(#piGradient)" stroke-width="1.5" />
+    <path d="M15,75 L25,85" stroke="url(#piGradient)" stroke-width="1.5" />
+    <path d="M75,75 L85,85" stroke="url(#piGradient)" stroke-width="1.5" />
+    <circle cx="50" cy="15" r="2" fill="url(#piGradient)" />
+    <circle cx="50" cy="85" r="2" fill="url(#piGradient)" />
+    <circle cx="15" cy="50" r="2" fill="url(#piGradient)" />
+    <circle cx="85" cy="50" r="2" fill="url(#piGradient)" />
+  </g>
+  
+  <!-- Modern Pi Symbol -->
+  <g class="pi-symbol" filter="url(#glow)">
+    <!-- Left vertical line of pi -->
+    <rect x="30" y="30" width="6" height="40" rx="2" fill="url(#piGradient)" />
+    
+    <!-- Right vertical line of pi -->
+    <rect x="64" y="30" width="6" height="40" rx="2" fill="url(#piGradient)" />
+    
+    <!-- Horizontal line of pi -->
+    <rect x="30" y="30" width="40" height="6" rx="2" fill="url(#piGradient)" />
+  </g>
 </svg>
