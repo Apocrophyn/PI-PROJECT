@@ -102,8 +102,8 @@ export default function Header() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.3, delay: 0.6 }}
             >
-              <Button className="ml-4" size="sm">
-                Book a Tutor
+              <Button className="ml-4 bg-primary hover:bg-primary/90 text-white" size="sm" asChild>
+                <Link href="/contact">Book a Tutor</Link>
               </Button>
             </motion.div>
             {user ? (
@@ -186,8 +186,8 @@ export default function Header() {
                 {item.name}
               </Link>
             ))}
-            <Button className="mt-4 w-full" size="sm">
-              Book a Tutor
+            <Button className="mt-4 w-full bg-primary hover:bg-primary/90 text-white" size="sm" asChild>
+              <Link href="/contact">Book a Tutor</Link>
             </Button>
             {user ? (
               <>
