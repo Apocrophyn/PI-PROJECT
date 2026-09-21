@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 
 export const SITE = {
   name: "PI Tutors",
-  url: "https://pitutors.com",
+  url: "https://www.pitutors.com",
   /** Used for the default social card and as the Organization logo. */
   ogImage: "/og.png",
   email: "info@pitutors.com",
