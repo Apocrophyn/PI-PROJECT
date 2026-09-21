@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import type * as ThreeNS from "three"
 import { cn } from "@/lib/utils"
 import { createLiquidEnvironment, createRenderer } from "@/components/site/three-studio"
+import { isScrolling, watchScrolling } from "@/components/site/use-scrolling"
 
 // Centre line of the letterform, in the object's own -1..1 space.
 const STROKES: [number, number][][] = [
@@ -203,6 +204,7 @@ export function LiquidPi({ className }: { className?: string }) {
       let visible = false
       const io = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting }, { rootMargin: "120px" })
       io.observe(host)
+      const unwatch = watchScrolling()
 
       const clock = new THREE.Clock()
       // Resampling the field is the expensive part and the eye cannot follow it at 60fps,
@@ -212,7 +214,9 @@ export function LiquidPi({ className }: { className?: string }) {
         const t = clock.getElapsedTime()
         pointer.x += (pointer.tx - pointer.x) * 0.045
         pointer.y += (pointer.ty - pointer.y) * 0.045
-        if (t - lastBuild >= 1 / 30) {
+        // Resampling the field is the only expensive part. Hold it while the page is
+        // moving and the mercury simply pauses, which nobody notices mid-scroll.
+        if (t - lastBuild >= 1 / 30 && !isScrolling()) {
           lastBuild = t
           build(t)
         }
@@ -236,6 +240,7 @@ export function LiquidPi({ className }: { className?: string }) {
         window.removeEventListener("pointermove", onMove)
         ro.disconnect()
         io.disconnect()
+        unwatch()
         env.dispose()
         blob.geometry.dispose()
         material.dispose()

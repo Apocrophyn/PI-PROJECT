@@ -153,7 +153,7 @@ export function CinematicHero({ variant = "panes" }: { variant?: HeroVariant }) 
     const cards = Array.from(cardsRef.current!.children) as HTMLElement[]
 
     const size = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.75)
+      const dpr = Math.min(window.devicePixelRatio || 1, mobile ? 1.5 : 1.25)
       canvas.width = Math.round(stage.clientWidth * dpr)
       canvas.height = Math.round(stage.clientHeight * dpr)
       current = -1
@@ -189,7 +189,7 @@ export function CinematicHero({ variant = "panes" }: { variant?: HeroVariant }) 
       new Promise<void>((resolve) => {
         const img = new Image()
         img.decoding = "async"
-        img.fetchPriority = "low"
+        img.fetchPriority = index < 24 ? "high" : "low"
         img.src = frameSrc(seq.dir, index)
         images[index] = img
         img.onload = () => {
@@ -204,21 +204,36 @@ export function CinematicHero({ variant = "panes" }: { variant?: HeroVariant }) 
       })
 
     const queue = Array.from({ length: seq.count }, (_, i) => i)
-    const worker = async () => {
-      while (queue.length && !disposed) await load(queue.shift()!)
+    const worker = async (limit = Infinity) => {
+      while (queue.length && !disposed && queue[0] < limit) await load(queue.shift()!)
     }
-    // Hold the sequence back until the page has painted and settled, so it never
-    // competes with the fonts, the poster or the rest of the first screen.
-    const startLoading = () => {
+    // The opening frames are needed the instant anyone scrolls, so they are fetched as
+    // soon as the page is interactive. The tail waits for idle and rides at low priority,
+    // where it cannot compete with the fonts, the poster or the first screen.
+    const LEAD = 24
+    const startLead = () => {
       if (disposed) return
       load(0).then(() => {
         queue.shift()
-        for (let n = 0; n < 3; n++) worker()
+        for (let n = 0; n < 3; n++) worker(LEAD)
       })
     }
+    const startTail = () => { if (!disposed) for (let n = 0; n < 2; n++) worker() }
+    const lead = window.setTimeout(startLead, 0)
     const idle = window.requestIdleCallback
-      ? window.requestIdleCallback(startLoading, { timeout: 2500 })
-      : window.setTimeout(startLoading, 900)
+      ? window.requestIdleCallback(startTail, { timeout: 4000 })
+      : window.setTimeout(startTail, 1800)
+
+    const written = new WeakMap<HTMLElement, Record<string, string>>()
+    const put = (el: HTMLElement, prop: string, value: string) => {
+      let last = written.get(el)
+      if (!last) written.set(el, (last = {}))
+      if (last[prop] === value) return
+      last[prop] = value
+      el.style.setProperty(prop, value)
+    }
+    /** Two decimals is finer than a pixel at any realistic size, and keeps the cache hitting. */
+    const q = (n: number) => (Math.round(n * 100) / 100).toString()
 
     const render = (p: number) => {
       progress = p
@@ -226,40 +241,43 @@ export function CinematicHero({ variant = "panes" }: { variant?: HeroVariant }) 
       draw(Math.round(f * (seq.count - 1)))
       // At rest the resolved final frame is shown; the first flick of scroll dissolves into the sequence.
       const handoff = lin(p, [0.002, 0.045])
-      posterRef.current!.style.opacity = String(1 - handoff)
-      canvas.style.opacity = String(ready[0] || current >= 0 ? handoff : 0)
-      canvas.style.transform = `scale(${1 + config.endZoom * lin(p, [0.8, 1])})`
+      put(posterRef.current!, "opacity", q(1 - handoff))
+      put(canvas, "opacity", q(ready[0] || current >= 0 ? handoff : 0))
+      put(canvas, "transform", `scale(${q(1 + config.endZoom * lin(p, [0.8, 1]))})`)
 
       const out = lin(p, T.copyOut)
       const copy = copyRef.current!
-      copy.style.opacity = String(1 - out)
-      copy.style.transform = `translate3d(0, ${-70 * out}px, 0)`
-      copy.style.filter = out > 0 ? `blur(${out * 10}px)` : ""
-      copy.style.pointerEvents = out > 0.5 ? "none" : ""
-      cueRef.current!.style.opacity = String(1 - lin(p, [0, 0.05]))
-      gradeRef.current!.style.opacity = String(1 - 0.75 * lin(p, [0.08, 0.3]))
+      put(copy, "opacity", q(1 - out))
+      put(copy, "transform", `translate3d(0, ${q(-70 * out)}px, 0)`)
+      // Blur is the most expensive thing here, so it moves in half-pixel steps.
+      put(copy, "filter", out > 0 ? `blur(${(Math.round(out * 20) / 2).toFixed(1)}px)` : "none")
+      put(copy, "pointer-events", out > 0.5 ? "none" : "auto")
+      put(cueRef.current!, "opacity", q(1 - lin(p, [0, 0.05])))
+      put(gradeRef.current!, "opacity", q(1 - 0.75 * lin(p, [0.08, 0.3])))
 
       const statementVisible = Math.min(lin(p, T.statementIn), 1 - lin(p, T.statementOut))
-      statementRef.current!.style.opacity = String(statementVisible)
-      statementRef.current!.style.transform = `translate3d(0, ${(1 - lin(p, T.statementIn)) * 40 - lin(p, T.statementOut) * 40}px, 0)`
+      put(statementRef.current!, "opacity", q(statementVisible))
+      put(statementRef.current!, "transform", `translate3d(0, ${q((1 - lin(p, T.statementIn)) * 40 - lin(p, T.statementOut) * 40)}px, 0)`)
       const lit = lin(p, T.statementLit) * statementLetters.length
-      statementLetters.forEach((el, i) => { el.style.opacity = String(clamp01(lit - i)) })
+      statementLetters.forEach((el, i) => put(el, "opacity", q(clamp01(lit - i))))
 
       const cardsOut = 1 - lin(p, T.cardsOut)
+      let cardPeak = 0
       cards.forEach((el, i) => {
         const slot = T.cards[0] + (i / cards.length) * (T.cards[1] - T.cards[0])
         const o = Math.min(clamp01((p - slot) / 0.05), cardsOut)
-        el.style.opacity = String(o)
-        el.style.transform = `translate3d(0, ${(1 - o) * 48}px, 0)`
+        if (o > cardPeak) cardPeak = o
+        put(el, "opacity", q(o))
+        put(el, "transform", `translate3d(0, ${q((1 - o) * 48)}px, 0)`)
       })
 
       const finale = lin(p, T.finaleIn)
-      finaleRef.current!.style.opacity = String(finale)
-      finaleRef.current!.style.transform = `translate3d(0, ${(1 - finale) * 36}px, 0) scale(${0.96 + 0.04 * finale})`
+      put(finaleRef.current!, "opacity", q(finale))
+      put(finaleRef.current!, "transform", `translate3d(0, ${q((1 - finale) * 36)}px, 0) scale(${q(0.96 + 0.04 * finale)})`)
       const finaleLit = lin(p, T.finaleLit) * finaleLetters.length
-      finaleLetters.forEach((el, i) => { el.style.opacity = String(clamp01(finaleLit - i)) })
+      finaleLetters.forEach((el, i) => put(el, "opacity", q(clamp01(finaleLit - i))))
 
-      shadeRef.current!.style.opacity = String(Math.max(statementVisible, 0.7 * Math.max(...cards.map((c) => Number(c.style.opacity)))) * (1 - finale))
+      put(shadeRef.current!, "opacity", q(Math.max(statementVisible, 0.7 * cardPeak) * (1 - finale)))
       finaleShadeRef.current!.style.opacity = String(finale)
       focusRef.current!.textContent = String(Math.round(f * 100)).padStart(3, "0")
       barRef.current!.style.transform = `scaleX(${p})`
@@ -283,6 +301,7 @@ export function CinematicHero({ variant = "panes" }: { variant?: HeroVariant }) 
 
     return () => {
       disposed = true
+      window.clearTimeout(lead)
       if (window.cancelIdleCallback) window.cancelIdleCallback(idle as number)
       else window.clearTimeout(idle as number)
       ro.disconnect()

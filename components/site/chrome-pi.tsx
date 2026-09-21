@@ -97,8 +97,12 @@ export function ChromePi({ className }: { className?: string }) {
       io.observe(host)
 
       const clock = new THREE.Clock()
+      // The piece only drifts, so 30fps is indistinguishable and costs half as much.
+      let lastFrame = -1
       const frame = () => {
         const t = clock.getElapsedTime()
+        if (t - lastFrame < 1 / 30) return
+        lastFrame = t
         pointer.x += (pointer.tx - pointer.x) * 0.05
         pointer.y += (pointer.ty - pointer.y) * 0.05
         group.rotation.y = Math.sin(t * 0.45) * 0.42 + pointer.x * 0.35

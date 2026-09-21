@@ -25,13 +25,6 @@ export const metadata: Metadata = {
   publisher: SITE.name,
   category: "education",
   formatDetection: { telephone: true, address: false, email: true },
-  icons: {
-    icon: [
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico", sizes: "48x48" },
-    ],
-    apple: "/apple-touch-icon.png",
-  },
   manifest: "/site.webmanifest",
   alternates: { canonical: "/" },
   openGraph: {

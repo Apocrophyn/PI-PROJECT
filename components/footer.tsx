@@ -7,7 +7,7 @@ import { InViewShimmer } from "@/components/site/in-view-shimmer"
 const DEVELOPER = {
   name: "Apocrophyn",
   github: "https://github.com/Apocrophyn",
-  email: "ahsana123456@gmail.com",
+  email: "ahsanalijanjuar@outlook.com",
 }
 
 const links = [
@@ -53,18 +53,15 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col gap-3 border-t border-white/10 pt-6 text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>© {new Date().getFullYear()} PI Tutors · KS3, GCSE &amp; A-Level</span>
-          <span className="flex flex-wrap items-center gap-x-6 gap-y-2">
+        <div className="mt-16 grid gap-6 border-t border-white/10 pt-6 text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground md:grid-cols-2 md:gap-10">
+          <div className="space-y-1">
+            <p>© {new Date().getFullYear()} PI Tutors · KS3, GCSE &amp; A-Level</p>
+            <p className="text-white/35">Designed &amp; developed by {DEVELOPER.name}</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-x-6 md:justify-end">
             <Link href="/privacy" className="inline-flex min-h-11 items-center transition-colors hover:text-foreground">Privacy</Link>
             <Link href="/terms" className="inline-flex min-h-11 items-center transition-colors hover:text-foreground">Terms</Link>
             <Link href="/sitemap.xml" className="inline-flex min-h-11 items-center transition-colors hover:text-foreground">Sitemap</Link>
-          </span>
-        </div>
-
-        <div className="mt-4 flex flex-col gap-3 text-[0.68rem] uppercase tracking-[0.14em] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span className="text-white/35">Designed &amp; developed by {DEVELOPER.name}</span>
-          <span className="flex flex-wrap items-center gap-x-6 gap-y-2">
             <a href={DEVELOPER.github} target="_blank" rel="noopener noreferrer" className="group inline-flex min-h-11 items-center gap-2 transition-colors hover:text-primary">
               <Github className="size-3.5" />GitHub
               <ArrowUpRight className="size-3 transition-transform duration-500 group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
@@ -72,7 +69,7 @@ export default function Footer() {
             <a href={`mailto:${DEVELOPER.email}`} className="inline-flex min-h-11 items-center gap-2 transition-colors hover:text-primary">
               <Mail className="size-3.5" />{DEVELOPER.email}
             </a>
-          </span>
+          </div>
         </div>
       </div>
 
