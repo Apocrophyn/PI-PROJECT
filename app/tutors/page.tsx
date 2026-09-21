@@ -1,265 +1,126 @@
-"use client"
-
-import Link from "next/link"
 import Image from "next/image"
+import Link from "next/link"
+import { ArrowUpRight, Clock3, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight } from "lucide-react"
-import { motion } from "framer-motion"
+import { PageIntro } from "@/components/site/page-intro"
+import { SectionReveal } from "@/components/site/section-reveal"
+import { ClosingCta } from "@/components/site/closing-cta"
+import { ClipImage, Slab } from "@/components/site/motion-kit"
+import { tutors } from "@/lib/site-data"
+import { absolute, breadcrumbs, JsonLd, pageMetadata, SITE } from "@/lib/seo"
+
+export const metadata = pageMetadata({
+  title: "Our Tutors: Qualified Maths & Science Teachers",
+  ogTitle: "Our Tutors: Qualified Maths & Physics Teachers",
+  description: "Meet the qualified teachers behind PI Tutors: a mathematics specialist in Rotherham and a physics specialist and IGCSE examiner in Birmingham.",
+  path: "/tutors",
+  keywords: ["qualified maths tutor", "physics tutor birmingham", "maths tutor rotherham", "igcse physics examiner", "experienced gcse tutor"],
+})
+
+const peopleGraph = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  itemListElement: tutors.map((tutor, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "Person",
+      name: tutor.name,
+      jobTitle: tutor.role,
+      description: tutor.description,
+      image: absolute(tutor.image),
+      url: absolute(`/tutors#${tutor.slug}`),
+      worksFor: { "@id": `${SITE.url}/#organisation` },
+      knowsAbout: tutor.subjects,
+      homeLocation: { "@type": "Place", name: tutor.location },
+    },
+  })),
+}
 
 export default function TutorsPage() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-      },
-    },
-  }
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  }
-
   return (
-    <div className="flex flex-col min-h-screen bg-gray-950">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 py-16 md:py-24 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(59,130,246,0.2),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_70%,rgba(236,72,153,0.2),transparent_50%)]"></div>
-        </div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <div className="inline-block rounded-lg bg-primary/10 px-3 py-1 text-sm font-medium text-primary">
-              Our Tutors
-            </div>
-            <h1 className="mt-4 text-4xl font-bold tracking-tight text-white sm:text-5xl">Meet Our Expert Tutors</h1>
-            <p className="mt-4 text-lg text-gray-300">
-              Our team of highly qualified tutors is passionate about education and committed to helping students
-              achieve their full potential.
-            </p>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Tutors Section */}
-      <section className="py-16 md:py-24 bg-gray-900">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="space-y-16">
-            <motion.div variants={itemVariants} className="bg-gray-800 rounded-xl shadow-xl overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
-                <div className="col-span-1">
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-lg">
-                    <Image
-                      src="/images/tutor-taimur.png"
-                      alt="Dr. Muhammad Taimur Khan"
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-                <div className="col-span-1 lg:col-span-2 flex flex-col justify-center">
-                  <h3 className="text-2xl font-bold text-white">Dr. Muhammad Taimur Khan</h3>
-                  <p className="mt-2 text-primary font-medium">Mathematics and Sciences Specialist</p>
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="text-sm font-semibold text-white">Qualifications</h4>
-                      <p className="mt-1 text-sm text-gray-400">
-                        PhD, PGCert, MSc in Business and Management, Sheffield Hallam University; BEng Chemical and
-                        Process Engineering, University of Sheffield
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-white">Experience</h4>
-                      <p className="mt-1 text-sm text-gray-400">
-                        Maths teacher and Second in Department in a Secondary school with an excellent reputation;
-                        previously an Associate Lecturer at Sheffield Hallam University.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-white">Subjects Offered</h4>
-                      <p className="mt-1 text-sm text-gray-400">KS3, GCSE and A Levels Maths</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-white">Availability</h4>
-                      <p className="mt-1 text-sm text-gray-400">Evenings from 6pm, Rotherham & Online</p>
-                    </div>
-                  </div>
-                  <p className="mt-4 text-sm text-gray-400">
-                    Taimur is passionate about inspiring students by reminding them about the amazing careers these
-                    subjects will lead to and how they develop our problem solving and analytical skills.
-                  </p>
-                  <div className="mt-6">
-                    <Button asChild>
-                      <Link href="/contact">
-                        Book a Session with Dr. Khan
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-
-            <motion.div variants={itemVariants} className="bg-gray-800 rounded-xl shadow-xl overflow-hidden">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 p-8">
-                <div className="col-span-1">
-                  <div className="relative aspect-[3/4] overflow-hidden rounded-lg">
-                    <Image src="/images/tutor-mukarram.png" alt="Mr. Muhammad Mukarram" fill className="object-cover" />
-                  </div>
-                </div>
-                <div className="col-span-1 lg:col-span-2 flex flex-col justify-center">
-                  <h3 className="text-2xl font-bold text-white">Mr. Muhammad Mukarram</h3>
-                  <p className="mt-2 text-primary font-medium">Sciences & Mathematics Specialist</p>
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <h4 className="text-sm font-semibold text-white">Qualifications</h4>
-                      <p className="mt-1 text-sm text-gray-400">
-                        PGDE (Physics with Maths | University of Sheffield, MSc Nanoscience and Engineering | NUST, BSc
-                        Materials Engineering | NUST
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-white">Experience</h4>
-                      <p className="mt-1 text-sm text-gray-400">
-                        Physics and Maths teacher at an Engineering College in Birmingham. Member and scholar at
-                        Institute of Physics (IOP). IGCSE Physics Examiner.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-white">Subjects Offered</h4>
-                      <p className="mt-1 text-sm text-gray-400">
-                        KS5 Physics, Maths and Further Maths | GCSE Physics, Maths and Further Maths
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-semibold text-white">Availability</h4>
-                      <p className="mt-1 text-sm text-gray-400">Evenings from 6pm, Birmingham & Online</p>
-                    </div>
-                  </div>
-                  <p className="mt-4 text-sm text-gray-400">
-                    Muhammad is passionate about inspiring students by boosting their confidence through development of
-                    problem solving and analytical skills.
-                  </p>
-                  <div className="mt-6">
-                    <Button asChild>
-                      <Link href="/contact">
-                        Book a Session with Mr. Mukarram
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Link>
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Teaching Approach Section */}
-      <section className="py-16 md:py-24 bg-gray-950 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_70%,rgba(59,130,246,0.2),transparent_50%)]"></div>
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(236,72,153,0.2),transparent_50%)]"></div>
-        </div>
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Our Teaching Approach</h2>
-            <p className="mt-4 text-lg text-gray-400 max-w-2xl mx-auto">
-              Our tutors employ a variety of teaching methods tailored to each student's learning style.
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="grid grid-cols-1 gap-8 md:grid-cols-3"
-          >
-            {[
-              {
-                title: "Conceptual Understanding",
-                description:
-                  "We focus on building a strong foundation by ensuring students truly understand the concepts rather than just memorizing formulas.",
-              },
-              {
-                title: "Problem-Solving Skills",
-                description:
-                  "Our tutors help students develop critical thinking and problem-solving skills that are applicable beyond the classroom.",
-              },
-              {
-                title: "Exam Preparation",
-                description:
-                  "We provide targeted preparation for exams, including practice with past papers and exam techniques to maximize performance.",
-              },
-            ].map((approach, index) => (
-              <Card
-                key={index}
-                className="overflow-hidden transition-all hover:shadow-lg bg-gray-800 border-gray-700 hover:border-primary/50"
-              >
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold text-white">{approach.title}</h3>
-                  <p className="mt-4 text-gray-400">{approach.description}</p>
-                </CardContent>
-              </Card>
+    <div className="bg-[#050708]">
+      <PageIntro
+        accent="Meet the tutors"
+        title={["Expertise you can ", { text: "feel", className: "italic", base: "#78ddea" }, " in the explanation."]}
+        description="Deep subject knowledge, classroom experience and the patience to keep reframing an idea until it becomes the student’s own."
+        side={
+          <div className="space-y-3">
+            {tutors.map((tutor) => (
+              <Link key={tutor.slug} href={`#${tutor.slug}`} className="group flex items-center gap-4 rounded-2xl border border-white/10 bg-[#0a0f12] p-3 pr-5 transition-colors duration-500 hover:border-primary/40">
+                <span className="relative block size-16 shrink-0 overflow-hidden rounded-xl"><Image src={tutor.image} alt="" fill sizes="64px" className="object-cover object-top transition-transform duration-700 group-hover:scale-110" /></span>
+                <span className="min-w-0"><span className="block font-display text-xl text-foreground">{tutor.name}</span><span className="mt-1 block text-[0.6rem] font-bold uppercase tracking-[0.13em] text-primary">{tutor.role}</span></span>
+                <ArrowUpRight className="ml-auto size-4 shrink-0 text-muted-foreground transition-all duration-500 group-hover:rotate-45 group-hover:text-primary" />
+              </Link>
             ))}
-          </motion.div>
+          </div>
+        }
+      />
+
+      <section className="page-section">
+        <div className="site-shell space-y-28 md:space-y-44">
+          {tutors.map((tutor, index) => (
+            <article id={tutor.slug} key={tutor.slug} className="scroll-mt-28">
+              <div className={`grid gap-10 md:grid-cols-2 md:items-center md:gap-20 ${index % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}>
+                <div className="relative">
+                  <ClipImage src={tutor.image} alt={`${tutor.name}, ${tutor.role}`} sizes="(max-width: 767px) 100vw, 50vw" className="aspect-[4/5]" imageClassName="object-[50%_18%]" parallax={4} />
+                  <div className="pointer-events-none absolute inset-0 rounded-3xl bg-gradient-to-t from-[#050708]/80 via-transparent to-transparent" />
+                  <span className="absolute bottom-6 left-6 rounded-full border border-white/15 bg-[#050708]/80 px-4 py-2 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-primary">{tutor.role}</span>
+                  <span aria-hidden="true" className="absolute -right-3 -top-3 hidden font-display text-8xl italic leading-none text-white/[0.06] md:block">0{index + 1}</span>
+                </div>
+
+                <SectionReveal delay={0.08}>
+                  <p className="text-[0.67rem] font-bold uppercase tracking-[0.17em] text-primary">Tutor profile · 0{index + 1}</p>
+                  <h2 className="mt-5 font-display text-[clamp(3rem,5.6vw,5.8rem)] leading-[0.92] tracking-[-0.045em]">{tutor.name}</h2>
+                  <p className="mt-7 text-lg leading-8 text-muted-foreground">{tutor.description}</p>
+                  <div className="mt-9 space-y-3">
+                    {[
+                      ["Subjects", tutor.subjects],
+                      ["Qualifications", tutor.qualifications],
+                      ["Experience", tutor.experience],
+                    ].map(([term, detail]) => (
+                      <Slab key={term} radius={14} depth={5} faceClassName="grid gap-2 p-5 md:grid-cols-[8rem_1fr]">
+                        <p className="text-[0.65rem] font-bold uppercase tracking-[0.14em] text-foreground/75">{term}</p>
+                        <p className="text-sm leading-7 text-muted-foreground">{detail}</p>
+                      </Slab>
+                    ))}
+                  </div>
+                  <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs uppercase tracking-[0.12em] text-foreground/75">
+                    <span className="flex items-center gap-2"><MapPin className="size-4 text-primary" />{tutor.location}</span>
+                    <span className="flex items-center gap-2"><Clock3 className="size-4 text-primary" />{tutor.availability}</span>
+                  </div>
+                  <Button variant="ivory" size="lg" className="mt-9" asChild><Link href="/contact#contact-form">Enquire about {tutor.shortName} <ArrowUpRight data-icon /></Link></Button>
+                </SectionReveal>
+              </div>
+            </article>
+          ))}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="bg-primary py-16 md:py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="mx-auto max-w-3xl text-center"
-          >
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Find Your Perfect Tutor Today</h2>
-            <p className="mt-4 text-lg text-white/90">
-              Contact us to discuss your tutoring needs and we'll match you with the right tutor for your learning style
-              and goals.
-            </p>
-            <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" variant="secondary" asChild>
-                <Link href="/contact">Contact Us</Link>
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="bg-transparent text-white border-white hover:bg-white/10"
-                asChild
-              >
-                <Link href="/services">View Services</Link>
-              </Button>
-            </div>
-          </motion.div>
+      <section className="page-section border-t border-white/[0.08] bg-[#070a0c]">
+        <div className="site-shell grid gap-12 md:grid-cols-[0.7fr_1.3fr] md:gap-24">
+          <SectionReveal><p className="eyebrow">In every session</p><h2 className="section-title mt-6">Three things stay <span className="italic text-primary">constant.</span></h2></SectionReveal>
+          <div className="grid gap-4 md:grid-cols-3">
+            {[
+              ["Concept", "Build a connected understanding before relying on a formula."],
+              ["Practice", "Choose problems that expose thinking and create useful stretch."],
+              ["Feedback", "Make the next improvement specific, visible and achievable."],
+            ].map(([title, text], index) => (
+              <SectionReveal key={title} delay={index * 0.07}>
+                <Slab className="h-full" faceClassName="min-h-64 p-7">
+                  <span className="text-xs font-bold text-primary">0{index + 1}</span>
+                  <h3 className="mt-12 font-display text-3xl">{title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-muted-foreground">{text}</p>
+                </Slab>
+              </SectionReveal>
+            ))}
+          </div>
         </div>
       </section>
+
+      <JsonLd data={peopleGraph} />
+      <JsonLd data={breadcrumbs([{ name: "Home", path: "/" }, { name: "Tutors", path: "/tutors" }])} />
+      <ClosingCta title="Find the tutor who fits the goal." />
     </div>
   )
 }
-

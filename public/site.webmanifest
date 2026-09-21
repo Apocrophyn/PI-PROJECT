@@ -1,0 +1,14 @@
+{
+  "name": "PI Tutors",
+  "short_name": "PI Tutors",
+  "description": "Mathematics and science tutoring for KS3, GCSE and A-Level students in Rotherham, Birmingham and online.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050708",
+  "theme_color": "#050708",
+  "lang": "en-GB",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

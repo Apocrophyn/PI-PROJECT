@@ -1,232 +1,121 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
-import Image from "next/image"
-import { Menu, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
+import { ArrowUpRight, Menu } from "lucide-react"
 import { motion } from "framer-motion"
-import { supabase } from "@/lib/supabase"
+import { Button } from "@/components/ui/button"
+import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { PiLogo } from "@/components/site/pi-mark"
+import { cn } from "@/lib/utils"
 
 const navItems = [
-  { name: "Home", href: "/" },
   { name: "About", href: "/about" },
   { name: "Services", href: "/services" },
   { name: "Tutors", href: "/tutors" },
-  { name: "Blog", href: "/blog" },
+  { name: "Articles", href: "/articles" },
   { name: "Contact", href: "/contact" },
 ]
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
-  const [user, setUser] = useState<any>(null)
   const pathname = usePathname()
-  const router = useRouter()
+  const [scrolled, setScrolled] = useState(false)
+  const [hidden, setHidden] = useState(false)
+  const [hovered, setHovered] = useState<string | null>(null)
+  const isHome = pathname === "/"
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 10)
+    let last = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 24)
+      if (y > 480 && y > last + 4) setHidden(true)
+      else if (y < last - 4 || y <= 480) setHidden(false)
+      last = y
     }
-
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
+    onScroll()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  useEffect(() => {
-    // Check if user is authenticated
-    const checkUser = async () => {
-      const { data } = await supabase.auth.getUser()
-      setUser(data?.user || null)
-    }
-    checkUser()
-  }, [])
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut()
-    setUser(null)
-    router.push('/')
-  }
+  const active = navItems.find((item) => pathname.startsWith(item.href))?.href
+  const indicator = hovered ?? active
 
   return (
-    <header
-      className={cn(
-        "sticky top-0 z-50 w-full transition-all duration-300",
-        scrolled ? "bg-gray-900/90 backdrop-blur-md shadow-md" : "bg-gray-900",
-      )}
-    >
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="relative h-10 w-10 sm:h-12 sm:w-12 transition-transform duration-300 hover:scale-110">
-                <Image src="/images/pi-circle-logo.svg" alt="PI Tutors Logo" fill className="object-contain" priority />
-              </div>
-              <motion.span
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5 }}
-                className="text-xl font-bold text-white"
-              >
-                PI TUTORS
-              </motion.span>
-            </Link>
-          </div>
+    <>
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 h-[var(--header-h)] transition-[transform,background-color,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
+          scrolled || !isHome ? "border-b border-white/[0.08] bg-[#050708]/[0.86]" : "border-b border-transparent bg-transparent",
+          hidden && "-translate-y-full",
+        )}
+      >
+        <div className="site-shell flex h-full items-center justify-between gap-4">
+          <Link href="/" aria-label="PI Tutors home" className="shrink-0">
+            <PiLogo animated />
+          </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
-            {navItems.map((item, index) => (
-              <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="relative group"
-              >
-                <div className="absolute -inset-2 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                <div className="absolute -inset-2 bg-gradient-to-r from-primary/10 via-primary/5 to-secondary/10 rounded-lg opacity-0 group-hover:opacity-100 transition duration-500 hover:scale-105 transform-gpu"></div>
-                <Link
-                  href={item.href}
-                  className={cn(
-                    "relative px-3 py-2 text-sm font-medium rounded-md transition-all duration-300",
-                    pathname === item.href
-                      ? "text-primary bg-primary/10"
-                      : "text-gray-300 hover:text-primary group-hover:bg-primary/5",
+          <nav aria-label="Main navigation" className="hidden md:block" onMouseLeave={() => setHovered(null)}>
+            <ul className="flex items-center gap-1 rounded-full border border-white/[0.09] bg-[#0a0f12]/80 p-1.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+              {navItems.map((item) => (
+                <li key={item.href} className="relative">
+                  {indicator === item.href && (
+                    <motion.span layoutId="nav-pill" transition={{ type: "spring", stiffness: 380, damping: 34 }} className="lg absolute inset-0 rounded-full" />
                   )}
-                >
-                  {item.name}
-                  <div className="absolute inset-0 rounded-md bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                </Link>
-              </motion.div>
-            ))}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: 0.6 }}
-              className="relative group"
-            >
-              <div className="absolute -inset-2 bg-gradient-to-r from-primary to-secondary rounded-lg blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
-              <Button className="relative ml-4 bg-primary hover:bg-primary/90 text-white transition-all duration-300 hover:scale-105 transform-gpu" size="sm" asChild>
-                <Link href="/contact">Book a Tutor</Link>
-              </Button>
-            </motion.div>
-            {user ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: 0.7 }}
-              >
-                <Button 
-                  variant="outline" 
-                  className="ml-4" 
-                  size="sm"
-                  onClick={() => router.push('/admin/dashboard')}
-                >
-                  Admin Dashboard
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  className="ml-2" 
-                  size="sm"
-                  onClick={handleSignOut}
-                >
-                  Sign Out
-                </Button>
-              </motion.div>
-            ) : (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3, delay: 0.7 }}
-              >
-                <Button 
-                  variant="outline" 
-                  className="ml-4" 
-                  size="sm"
-                  onClick={() => router.push('/admin/login')}
-                >
-                  Admin Login
-                </Button>
-              </motion.div>
-            )}
+                  <Link
+                    href={item.href}
+                    onMouseEnter={() => setHovered(item.href)}
+                    aria-current={active === item.href ? "page" : undefined}
+                    className={cn(
+                      "relative z-10 block rounded-full px-4 py-2 text-[0.68rem] font-semibold uppercase tracking-[0.14em] transition-colors duration-300",
+                      indicator === item.href ? "text-[#f0eee6]" : "text-white/55 hover:text-white/90",
+                    )}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </nav>
 
-          {/* Mobile Navigation Toggle */}
-          <div className="flex md:hidden">
-            <button type="button" className="text-gray-300 hover:text-white" onClick={() => setIsOpen(!isOpen)}>
-              <span className="sr-only">Open main menu</span>
-              {isOpen ? (
-                <X className="block h-6 w-6" aria-hidden="true" />
-              ) : (
-                <Menu className="block h-6 w-6" aria-hidden="true" />
-              )}
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Navigation Menu */}
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          transition={{ duration: 0.3 }}
-          className="md:hidden bg-gray-800"
-        >
-          <div className="space-y-1 px-4 pb-3 pt-2">
-            {navItems.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "block px-3 py-2 text-base font-medium rounded-md",
-                  pathname === item.href
-                    ? "text-primary bg-primary/10"
-                    : "text-gray-300 hover:text-primary hover:bg-primary/10",
-                )}
-                onClick={() => setIsOpen(false)}
-              >
-                {item.name}
-              </Link>
-            ))}
-            <Button className="mt-4 w-full bg-primary hover:bg-primary/90 text-white" size="sm" asChild>
-              <Link href="/contact">Book a Tutor</Link>
+          <div className="hidden md:block">
+            <Button variant="ivory" size="sm" asChild>
+              <Link href="/contact">Book a tutor <ArrowUpRight data-icon /></Link>
             </Button>
-            {user ? (
-              <>
-                <Button 
-                  className="mt-2 w-full" 
-                  size="sm"
-                  onClick={() => router.push('/admin/dashboard')}
-                >
-                  Admin Dashboard
-                </Button>
-                <Button 
-                  variant="outline" 
-                  className="mt-2 w-full" 
-                  size="sm"
-                  onClick={handleSignOut}
-                >
-                  Sign Out
-                </Button>
-              </>
-            ) : (
-              <Button 
-                variant="outline" 
-                className="mt-2 w-full" 
-                size="sm"
-                onClick={() => router.push('/admin/login')}
-              >
-                Admin Login
-              </Button>
-            )}
           </div>
-        </motion.div>
-      )}
-    </header>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="glass" size="icon" className="md:hidden" aria-label="Open navigation"><Menu data-icon /></Button>
+            </SheetTrigger>
+            <SheetContent className="flex flex-col border-white/10 bg-[#050708] p-7">
+              <SheetHeader className="border-b border-white/10 pb-6 text-left">
+                <SheetTitle><PiLogo /></SheetTitle>
+              </SheetHeader>
+              <nav aria-label="Mobile navigation" className="flex flex-col py-6">
+                {[{ name: "Home", href: "/" }, ...navItems].map((item, index) => (
+                  <SheetClose asChild key={item.href}>
+                    <Link
+                      href={item.href}
+                      className="group flex items-baseline justify-between border-b border-white/10 py-4 opacity-0 [animation:letter-in_0.8s_var(--ease-out)_both]"
+                      style={{ animationDelay: `${120 + index * 60}ms` }}
+                    >
+                      <span className="font-display text-4xl tracking-[-0.03em] text-[#f0eee6] transition-colors group-hover:text-primary">{item.name}</span>
+                      <span className="text-[0.65rem] font-bold tracking-[0.16em] text-white/40">0{index + 1}</span>
+                    </Link>
+                  </SheetClose>
+                ))}
+              </nav>
+              <div className="mt-auto">
+                <Button variant="ivory" size="lg" className="w-full" asChild><Link href="/contact">Book a tutor <ArrowUpRight data-icon /></Link></Button>
+                <div className="mt-5 flex justify-center"><Link href="/admin/login" className="text-xs uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground">Admin</Link></div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </header>
+      {!isHome && <div aria-hidden="true" className="h-[var(--header-h)]" />}
+    </>
   )
 }
-

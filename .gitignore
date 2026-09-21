@@ -35,3 +35,9 @@ pnpm-debug.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# tooling and local scratch
+/test-results
+/.conductor
+/.impeccable
+/.context

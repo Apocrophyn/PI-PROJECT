@@ -1,8 +1,5 @@
 import { Resend } from 'resend';
 
-// Initialize Resend with API key from environment variable
-export const resend = new Resend(process.env.RESEND_API_KEY);
-
 // Email configuration
 export const emailConfig = {
   from: process.env.NEXT_PUBLIC_EMAIL_FROM || 'onboarding@resend.dev',
@@ -27,6 +24,12 @@ export async function sendEmail({
   replyTo?: string;
 }) {
   try {
+    const apiKey = process.env.RESEND_API_KEY;
+    if (!apiKey) {
+      throw new Error('RESEND_API_KEY is not configured');
+    }
+
+    const resend = new Resend(apiKey);
     // During development, force send to verified email only
     const recipients = process.env.NODE_ENV === 'production'
       ? (Array.isArray(to) ? to : [to])
@@ -49,4 +52,4 @@ export async function sendEmail({
     console.error('Error sending email:', error);
     throw error;
   }
-} 
+}

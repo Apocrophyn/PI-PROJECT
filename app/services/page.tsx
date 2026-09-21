@@ -1,517 +1,179 @@
-"use client";
+import Link from "next/link"
+import { ArrowUpRight, Check } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { SectionReveal } from "@/components/site/section-reveal"
+import { ClosingCta } from "@/components/site/closing-cta"
+import { SubjectRows } from "@/components/site/subject-rows"
+import { ShimmerText } from "@/components/site/shimmer-text"
+import { LiquidPi } from "@/components/site/liquid-pi"
+import { ServiceGlyph, type GlyphKind } from "@/components/site/service-glyph"
+import { CountUp, Marquee, Slab } from "@/components/site/motion-kit"
+import { formats, subjectGroups, supportServices } from "@/lib/site-data"
+import { absolute, breadcrumbs, JsonLd, pageMetadata, SITE } from "@/lib/seo"
 
-import React, { useEffect, useRef, useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
-import { ArrowRight, CheckCircle } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+export const metadata = pageMetadata({
+  title: "Tutoring Services, Subjects & Rates",
+  ogTitle: "Tutoring Services: Maths, Physics, Chemistry & Biology",
+  description: "One-to-one and small-group tutoring in maths, physics, chemistry and biology for KS3, GCSE and A-Level. Online and in person, from £25 per hour.",
+  path: "/services",
+  keywords: [
+    "gcse maths tutoring",
+    "a level maths tutoring",
+    "gcse physics tutor",
+    "gcse chemistry tutor",
+    "gcse biology tutor",
+    "one to one tutoring uk",
+    "small group tutoring",
+    "tutoring rates uk",
+  ],
+})
 
-export interface Service {
-  title: string;
-  description: string;
-  features: string[];
-  image: string;
+const coursesGraph = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Subjects taught by PI Tutors",
+  itemListElement: subjectGroups.map((subject, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type": "Course",
+      name: `${subject.title} tutoring (${subject.levels})`,
+      description: subject.detail,
+      url: absolute("/services#subjects"),
+      provider: { "@id": `${SITE.url}/#organisation` },
+      educationalLevel: subject.stages.join(", "),
+      inLanguage: "en-GB",
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: ["online", "onsite"],
+        courseWorkload: "PT1H",
+        location: { "@type": "Place", name: "Rotherham, Birmingham and online" },
+      },
+      offers: { "@type": "Offer", category: "Paid", priceCurrency: "GBP", price: "35", availability: "https://schema.org/InStock" },
+    },
+  })),
 }
 
-// ServiceCard component for displaying service information
-const ServiceCard = ({ service }: { service: Service }) => {
-  return (
-    <Card className="h-full bg-gray-800 border-gray-700 hover:border-blue-500 transition-colors duration-300">
-      <CardHeader>
-        <div className="relative w-full h-48 mb-4">
-          <Image
-            src={service.image}
-            alt={service.title}
-            fill
-            className="object-contain"
-          />
-        </div>
-        <CardTitle className="text-xl font-bold text-white mb-2">
-          {service.title}
-        </CardTitle>
-        <CardDescription className="text-gray-400">
-          {service.description}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ul className="space-y-2">
-          {service.features.map((feature, featureIndex) => (
-            <li
-              key={featureIndex}
-              className="flex items-start space-x-2 text-gray-300"
-            >
-              <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-              <span>{feature}</span>
-            </li>
-          ))}
-        </ul>
-      </CardContent>
-      <CardFooter>
-        <Link
-          href="/contact"
-          className="inline-flex items-center space-x-2 text-blue-400 hover:text-blue-300 transition-colors duration-300"
-        >
-          <span>Learn more</span>
-          <ArrowRight className="h-4 w-4" />
-        </Link>
-      </CardFooter>
-    </Card>
-  );
-};
+const formatGlyphs: GlyphKind[] = ["one-to-one", "small-group", "online"]
+const supportGlyphs: GlyphKind[] = ["assessment", "exam", "homework", "university"]
 
 export default function ServicesPage() {
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5,
-      },
-    },
-  };
-
-  const tutoringFormats = [
-    {
-      title: "One-on-One Tutoring",
-      description: "Personalized attention and customized learning plans.",
-      features: [
-        "Individual attention",
-        "Customized pace",
-        "Flexible scheduling",
-        "Targeted support",
-        "Regular progress updates",
-      ],
-      image: "/images/one-on-one-tutoring.svg",
-    },
-    {
-      title: "Online Tutoring",
-      description: "Convenient and effective remote learning solutions.",
-      features: [
-        "Interactive sessions",
-        "Digital resources",
-        "Flexible timing",
-        "Screen sharing",
-        "Recording options",
-      ],
-      image: "/images/online-tutoring.svg",
-    },
-    {
-      title: "Small Group Sessions",
-      description: "Collaborative learning in small, focused groups.",
-      features: [
-        "Peer learning",
-        "Cost-effective",
-        "Group discussions",
-        "Shared resources",
-        "Social interaction",
-      ],
-      image: "/images/small-group-tutoring.svg",
-    },
-  ];
-
-  const allServices: Service[] = [
-    {
-      title: "KS3 Mathematics",
-      description: "Building strong foundations in mathematics for students aged 11-14.",
-      features: [
-        "Number and algebra fundamentals",
-        "Geometry and measures",
-        "Statistics and probability",
-        "Problem-solving techniques",
-        "Preparation for GCSE",
-      ],
-      image: "/images/ks3-math.svg",
-    },
-    {
-      title: "KS3 Chemistry",
-      description: "Introduction to chemistry concepts for Key Stage 3 students.",
-      features: [
-        "Atomic structure and elements",
-        "Chemical reactions",
-        "Acids and bases",
-        "Practical experiments",
-        "Scientific method",
-      ],
-      image: "/images/ks3-chemistry-animation.svg",
-    },
-    {
-      title: "KS3 Biology",
-      description: "Introduction to biology concepts for Key Stage 3 students.",
-      features: [
-        "Cell structure and function",
-        "Human body systems",
-        "Plants and photosynthesis",
-        "Practical experiments",
-        "Scientific method",
-      ],
-      image: "/images/ks3-biology-animation.svg",
-    },
-    {
-      title: "GCSE Mathematics",
-      description: "Comprehensive GCSE mathematics preparation and support.",
-      features: [
-        "Exam technique and practice",
-        "Past paper solutions",
-        "Topic-specific revision",
-        "Grade improvement strategies",
-        "Confidence building",
-      ],
-      image: "/images/gcse-math.svg",
-    },
-    {
-      title: "GCSE Chemistry",
-      description: "Comprehensive chemistry tutoring for GCSE excellence.",
-      features: [
-        "Atomic structure and bonding",
-        "Chemical reactions and equations",
-        "Required practicals",
-        "Exam technique",
-        "Foundation and Higher tier",
-      ],
-      image: "/images/ks3-chemistry-animation.svg",
-    },
-    {
-      title: "GCSE Biology",
-      description: "Comprehensive biology tutoring for GCSE success.",
-      features: [
-        "Cell biology and organization",
-        "Disease and bioenergetics",
-        "Required practicals",
-        "Exam technique",
-        "Foundation and Higher tier",
-      ],
-      image: "/images/ks3-biology-animation.svg",
-    },
-    {
-      title: "A-Level Mathematics",
-      description: "Expert guidance for A-Level mathematics success.",
-      features: [
-        "Pure mathematics mastery",
-        "Applied mathematics support",
-        "Exam preparation",
-        "Complex problem-solving",
-        "University preparation",
-      ],
-      image: "/images/alevel-math.svg",
-    },
-    {
-      title: "KS3 Physics",
-      description: "Introduction to physics concepts for Key Stage 3 students.",
-      features: [
-        "Forces and motion",
-        "Energy and waves",
-        "Electricity and magnetism",
-        "Practical experiments",
-        "Scientific method",
-      ],
-      image: "/images/ks3-physics-animation.svg",
-    },
-    {
-      title: "GCSE Physics",
-      description: "Comprehensive physics tutoring for GCSE excellence.",
-      features: [
-        "Core physics concepts",
-        "Mathematical applications",
-        "Required practicals",
-        "Exam technique",
-        "Foundation and Higher tier",
-      ],
-      image: "/images/physics-animation.svg",
-    },
-    {
-      title: "A-Level Physics",
-      description: "Advanced physics tutoring for A-Level students.",
-      features: [
-        "Mechanics and materials",
-        "Waves and particles",
-        "Fields and interactions",
-        "Advanced mathematics",
-        "University preparation",
-      ],
-      image: "/images/alevel-physics-animation.svg",
-    },
-    {
-      title: "Academic Assessment",
-      description: "Comprehensive evaluation of current knowledge and areas for improvement.",
-      features: [
-        "Initial assessment",
-        "Progress tracking",
-        "Personalized feedback",
-        "Regular updates",
-        "Goal setting",
-      ],
-      image: "/images/academic-assessment-animation.svg",
-    },
-    {
-      title: "Exam Preparation",
-      description: "Targeted preparation for specific exams and test-taking strategies.",
-      features: [
-        "Exam techniques",
-        "Past paper practice",
-        "Time management",
-        "Stress management",
-        "Mock exams",
-      ],
-      image: "/images/exam-prep-animation.svg",
-    },
-    {
-      title: "Homework Help",
-      description: "Support with challenging homework assignments and projects.",
-      features: [
-        "One-on-one support",
-        "Project guidance",
-        "Problem-solving",
-        "Study skills",
-        "Time management",
-      ],
-      image: "/images/homework-help-animation.svg",
-    },
-    {
-      title: "University Support",
-      description: "Guidance for university applications and entrance exams.",
-      features: [
-        "Application advice",
-        "Personal statement",
-        "Interview prep",
-        "Entrance exams",
-        "Course selection",
-      ],
-      image: "/images/university-support-animation.svg",
-    },
-  ];
-
-  // Filter services for different sections
-  const subjectServices = allServices.filter(service => [
-    'KS3 Mathematics',
-    'KS3 Chemistry',
-    'KS3 Biology',
-    'GCSE Mathematics',
-    'GCSE Chemistry',
-    'GCSE Biology',
-    'KS3 Physics',
-    'GCSE Physics',
-    'A-Level Mathematics',
-    'A-Level Physics'
-  ].includes(service.title));
-
-  const additionalSupport = allServices.filter(service => [
-    'Academic Assessment',
-    'Exam Preparation',
-    'Homework Help',
-    'University Support'
-  ].includes(service.title));
-
   return (
-    <div className="flex flex-col min-h-screen bg-gray-950">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <div className="container mx-auto px-4 py-8">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-white mb-4">Our Services</h1>
-            <p className="text-xl text-gray-400">
-              Empowering students through personalized tutoring in Mathematics and Sciences
-            </p>
+    <div className="bg-[#050708]">
+      <section className="relative overflow-hidden border-b border-white/[0.08] pb-16 pt-12 md:pb-24 md:pt-16">
+        <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-[46%] h-px origin-left bg-gradient-to-r from-transparent via-primary/30 to-transparent [animation:grow-x_1.8s_var(--ease-out)_0.3s_both]" />
+        <div className="site-shell grid items-center gap-12 md:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] md:gap-16">
+          <div>
+            <p className="eyebrow opacity-0 [animation:letter-in_0.9s_var(--ease-out)_both]">Tutoring services</p>
+            <ShimmerText
+              as="h1"
+              intro
+              introDelay={120}
+              shineDelay={1600}
+              segments={["The right support, at the ", { text: "right depth.", className: "italic", base: "#78ddea" }]}
+              className="mt-6 block max-w-[11ch] font-display text-[clamp(3rem,6.4vw,6.4rem)] leading-[0.92] tracking-[-0.05em]"
+            />
+            <p className="body-large mt-7 max-w-lg opacity-0 [animation:letter-in_1s_var(--ease-out)_0.55s_both]">Subject teaching, assessment and flexible formats, focused on what the student needs to understand next.</p>
+            <div className="mt-9 flex flex-wrap items-center gap-3 opacity-0 [animation:letter-in_1s_var(--ease-out)_0.7s_both]">
+              <Button variant="ivory" size="lg" asChild><Link href="/contact">Book a session <ArrowUpRight data-icon /></Link></Button>
+              <Button variant="glass" size="lg" asChild><a href="#subjects">See the subjects</a></Button>
+            </div>
+            <dl className="mt-12 grid max-w-xl grid-cols-3 gap-6 border-t border-white/10 pt-6 opacity-0 [animation:letter-in_1s_var(--ease-out)_0.85s_both]">
+              {[["Levels", "KS3 to A-Level"], ["Subjects", "Maths & sciences"], ["From", "£25 / hour"]].map(([k, v]) => (
+                <div key={k}><dt className="text-[0.62rem] font-bold uppercase tracking-[0.16em] text-white/45">{k}</dt><dd className="mt-2 font-display text-xl md:text-2xl">{v}</dd></div>
+              ))}
+            </dl>
           </div>
 
-          {/* Subject Services Section with Carousel */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-white mb-8 text-center">Subject Services</h2>
-            <Carousel className="w-full max-w-6xl mx-auto">
-              <CarouselContent>
-                {subjectServices.map((service, index) => (
-                  <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-                    <ServiceCard service={service} />
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <div className="flex justify-center gap-4 mt-6">
-                <CarouselPrevious className="static translate-x-0" />
-                <CarouselNext className="static translate-x-0" />
+          <div className="relative">
+            <Slab radius={24} depth={18} lift={false} faceClassName="p-2.5">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-[radial-gradient(120%_90%_at_50%_18%,#101a1e,#040709_62%)]">
+                <LiquidPi className="absolute inset-0" />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-x-[16%] bottom-[11%] h-10 rounded-[50%] bg-[radial-gradient(closest-side,rgba(120,221,234,0.2),transparent)] blur-lg" />
+                <div aria-hidden="true" className="pointer-events-none absolute inset-0 rounded-lg ring-1 ring-inset ring-white/10" />
               </div>
-            </Carousel>
+            </Slab>
+            <p className="mt-4 text-center text-[0.64rem] font-bold uppercase tracking-[0.18em] text-white/35">One constant, shaped to each student</p>
           </div>
-
-          {/* Tutoring Formats Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-white mb-8 text-center">Tutoring Formats</h2>
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-            >
-              {tutoringFormats.map((format, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  className="relative group"
-                >
-                  <ServiceCard service={format} />
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-
-          {/* Additional Support Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-white mb-8 text-center">Additional Support</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {additionalSupport.map((service, index) => (
-                <ServiceCard key={index} service={service} />
-              ))}
-            </div>
-          </div>
-
-          {/* Pricing Section */}
-          <div className="mb-16">
-            <h2 className="text-3xl font-bold text-white mb-8 text-center">Pricing</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              {/* A-Level Card */}
-              <Card className="bg-gray-800 border-gray-700 hover:border-blue-500 transition-colors duration-300">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-white text-center">A-Level</CardTitle>
-                  <div className="text-center mt-4">
-                    <span className="text-4xl font-bold text-blue-500">£50</span>
-                    <span className="text-gray-400 ml-2">/ hour</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>One-on-one tutoring</span>
-                    </li>
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>Personalized learning plan</span>
-                    </li>
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>University preparation</span>
-                    </li>
-                  </ul>
-                </CardContent>
-                <CardFooter className="flex justify-center">
-                  <Button asChild variant="secondary">
-                    <Link href="/contact#contact-form">Get Started</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              {/* GCSE & KS3 One-on-One Card */}
-              <Card className="bg-gray-800 border-gray-700 hover:border-blue-500 transition-colors duration-300">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-white text-center">GCSE & KS3</CardTitle>
-                  <div className="text-center mt-4">
-                    <span className="text-4xl font-bold text-blue-500">£35</span>
-                    <span className="text-gray-400 ml-2">/ hour</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>One-on-one tutoring</span>
-                    </li>
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>Exam preparation</span>
-                    </li>
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>Regular progress tracking</span>
-                    </li>
-                  </ul>
-                </CardContent>
-                <CardFooter className="flex justify-center">
-                  <Button asChild variant="secondary">
-                    <Link href="/contact#contact-form">Get Started</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-
-              {/* Small Groups Card */}
-              <Card className="bg-gray-800 border-gray-700 hover:border-blue-500 transition-colors duration-300">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-bold text-white text-center">Small Groups</CardTitle>
-                  <div className="text-center mt-4">
-                    <span className="text-4xl font-bold text-blue-500">£25</span>
-                    <span className="text-gray-400 ml-2">/ hour</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>Small group sessions</span>
-                    </li>
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>Interactive learning</span>
-                    </li>
-                    <li className="flex items-start space-x-2 text-gray-300">
-                      <CheckCircle className="h-5 w-5 text-blue-500 mt-0.5 flex-shrink-0" />
-                      <span>Cost-effective option</span>
-                    </li>
-                  </ul>
-                </CardContent>
-                <CardFooter className="flex justify-center">
-                  <Button asChild variant="secondary">
-                    <Link href="/contact#contact-form">Get Started</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
-            </div>
-          </div>
-
-          <section className="bg-primary py-16 md:py-24">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="mx-auto max-w-3xl text-center"
-              >
-                <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Ready to Get Started?</h2>
-                <p className="mt-4 text-lg text-white/90">
-                  Contact us today to discuss your tutoring needs and find the perfect learning solution for you.
-                </p>
-                <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" variant="secondary" asChild>
-                    <Link href="/contact">Contact Us</Link>
-                  </Button>
-                  <Button
-                    size="lg"
-                    variant="outline"
-                    className="bg-transparent text-white border-white hover:bg-white/10"
-                    asChild
-                  >
-                    <Link href="/tutors">Meet Our Tutors</Link>
-                  </Button>
-                </div>
-              </motion.div>
-            </div>
-          </section>
         </div>
-      </motion.div>
+      </section>
+
+      <section id="subjects" className="page-section scroll-mt-20">
+        <div className="site-shell">
+          <SectionReveal className="max-w-3xl">
+            <h2 className="section-title">Build the idea. Then build <span className="italic text-primary">on it.</span></h2>
+            <p className="body-large mt-6">Four subjects, taught the same way: find where understanding stopped, rebuild it, then stretch it. Support runs from foundations to advanced reasoning.</p>
+          </SectionReveal>
+          <div className="mt-14 md:mt-20"><SubjectRows /></div>
+        </div>
+      </section>
+
+      <section className="border-y border-white/[0.08] py-8 md:py-10" aria-label="Formats">
+        <Marquee items={["One-to-one", "Small groups", "Online", "In person", "Exam preparation", "Homework support", "University support"]} />
+      </section>
+
+      <section className="page-section bg-[#070a0c]">
+        <div className="site-shell">
+          <SectionReveal className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <h2 className="section-title max-w-[12ch]">A format that fits the <span className="italic text-primary">student.</span></h2>
+            <p className="max-w-sm text-sm leading-7 text-muted-foreground">KS3 and GCSE one-to-one sessions are £35 per hour. A-Level one-to-one sessions are £50 per hour. Small-group sessions are £25 per student per hour.</p>
+          </SectionReveal>
+          <div className="mt-16 grid gap-6 md:grid-cols-3">
+            {formats.map((format, index) => (
+              <SectionReveal key={format.title} delay={index * 0.08} className="h-full">
+                <Slab className="h-full" faceClassName="flex min-h-[34rem] flex-col p-7 md:p-9">
+                  <div className="flex items-start justify-between">
+                    <span className="lg-disc grid size-[5.25rem] place-items-center"><ServiceGlyph kind={formatGlyphs[index]} /></span>
+                    <span className="text-[0.62rem] uppercase tracking-[0.14em] text-white/45">{format.note}</span>
+                  </div>
+                  <h3 className="mt-8 font-display text-[2.6rem] leading-none tracking-[-0.03em]">{format.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-muted-foreground">{format.description}</p>
+                  <ul className="mt-7 space-y-3">
+                    {format.features.map((feature) => <li key={feature} className="flex items-center gap-3 text-sm text-foreground/85"><span className="h-px w-4 bg-gradient-to-r from-primary to-secondary" />{feature}</li>)}
+                  </ul>
+                  <div className="mt-auto flex items-end gap-3 border-t border-white/10 pt-6">
+                    {format.price.startsWith("£") ? <CountUp to={Number(format.price.slice(1))} prefix="£" className="font-display text-6xl leading-none tracking-[-0.04em]" /> : <span className="font-display text-6xl italic leading-none tracking-[-0.04em]">{format.price}</span>}
+                    <span className="pb-1 text-xs uppercase tracking-[0.13em] text-white/55">{format.unit}</span>
+                  </div>
+                </Slab>
+              </SectionReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="page-section">
+        <div className="site-shell">
+          <SectionReveal className="grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-end">
+            <h2 className="section-title">Support around the <span className="italic text-primary">subject.</span></h2>
+            <div className="md:justify-self-end">
+              <p className="body-large">Structured help for the moments that matter most, from a first assessment to the next step after school.</p>
+              <Button variant="glass" className="mt-7" asChild><Link href="/contact">Discuss your needs <ArrowUpRight data-icon /></Link></Button>
+            </div>
+          </SectionReveal>
+          <div className="mt-16 grid gap-6 md:grid-cols-2">
+            {supportServices.map((service, index) => (
+              <SectionReveal key={service.title} delay={(index % 2) * 0.08} className="h-full">
+                <Slab className="group h-full" faceClassName="grid h-full gap-6 p-7 sm:grid-cols-[auto_1fr] md:p-9">
+                  <span className="lg-disc grid size-[5.75rem] shrink-0 place-items-center"><ServiceGlyph kind={supportGlyphs[index]} /></span>
+                  <div>
+                    <span className="text-[0.65rem] font-bold uppercase tracking-[0.17em] text-primary">0{index + 1}</span>
+                    <h3 className="mt-3 font-display text-4xl tracking-[-0.03em] transition-colors duration-500 group-hover:text-primary">{service.title}</h3>
+                    <p className="mt-4 max-w-lg text-sm leading-7 text-muted-foreground">{service.description}</p>
+                    <ul className="mt-6 flex flex-wrap gap-2">
+                      {service.features.map((feature) => <li key={feature} className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.02] px-3.5 py-1.5 text-[0.68rem] font-semibold uppercase tracking-[0.1em] text-white/70"><Check className="size-3 text-primary" />{feature}</li>)}
+                    </ul>
+                  </div>
+                </Slab>
+              </SectionReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <JsonLd data={coursesGraph} />
+      <JsonLd data={breadcrumbs([{ name: "Home", path: "/" }, { name: "Services", path: "/services" }])} />
+      <ClosingCta title="Not sure which route fits?" description="Tell us the subject, level and what currently feels difficult. We’ll recommend a practical starting point." />
     </div>
-  );
+  )
 }
